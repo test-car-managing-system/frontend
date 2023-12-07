@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
       -moz-osx-font-smoothing: grayscale;
       box-sizing: border-box; /* 엘리먼트의 box-sizing 값을 border-box로 설정 */
       background-color: '#121212';
-      color: white;
+      color: black;
       overflow-x: hidden;
       overflow-y: scroll;
        // 스크롤바 제거

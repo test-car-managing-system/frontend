@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from '../../components/button/Button';
 import Template from '../../components/layout/Template';
 import LayoutMenu from '../../components/layout/LayoutTemplate';
+import useGetUserInfo from '../../hooks/useGetMyInfo';
 
 function Home() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function Home() {
   };
 
   return (
-    <Template variant="홈">
+    <Template>
       <LayoutMenu>
         <Wrapper>
           {/* <SizedBox /> */}
@@ -36,19 +37,6 @@ const Wrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-`;
-
-const OhzuLogo = styled.div`
-  height: 400px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & > img {
-    width: 180px;
-    height: auto;
-  }
 `;
 
 const SizedBox = styled.div`
