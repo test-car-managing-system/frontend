@@ -5,7 +5,11 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './common/theme';
 import { GlobalStyle } from './common/global-theme';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import LayoutMenu from './components/layout/LayoutTemplate';
+import Auth from './pages/auth';
+import Car from './pages/car';
+import DashBoard from './pages/dashboard/DashBoard';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -18,7 +22,17 @@ root.render(
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
-        <App />
+        <Routes key={location.pathname} location={location}>
+          <Route path="/auth/*" element={<Auth />} />
+          <Route
+            path="*"
+            element={
+              <LayoutMenu>
+                <App />
+              </LayoutMenu>
+            }
+          />
+        </Routes>
       </QueryClientProvider>
     </ThemeProvider>
   </BrowserRouter>,

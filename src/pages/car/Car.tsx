@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CarReservationTable from '../../components/table/CarReservationTable';
 import TrackReservaitonTable from '../../components/table/TrackReservaitonTable';
 
-function DashBoard() {
+function Car() {
   return (
     <Wrapper>
       {/* <SizedBox /> */}
@@ -13,7 +13,7 @@ function DashBoard() {
   );
 }
 
-export default DashBoard;
+export default Car;
 
 const Wrapper = styled.div`
   display: flex;
