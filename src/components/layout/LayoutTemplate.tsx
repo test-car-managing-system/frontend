@@ -100,15 +100,11 @@ function LayoutMenu({ children, variant }: TemplateProps) {
         >
           <Logo>시험차량 관리 시스템</Logo>
           <div className="demo-logo-vertical" />
-          <Menu defaultSelectedKeys={['1']} mode="inline" items={items} />
+          <Menu defaultSelectedKeys={['01']} mode="inline" items={items} />
         </Sider>
         <Layout>
           <LayoutHeader />
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
+          <Content style={{ margin: '16px' }}>
             <div
               style={{
                 padding: 24,

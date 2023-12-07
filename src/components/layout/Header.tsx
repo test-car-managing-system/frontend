@@ -2,17 +2,20 @@ import styled from 'styled-components';
 import { Layout } from 'antd';
 const { Header } = Layout;
 import Button from '../button/Button';
+import useGetMyInfo from '../../hooks/useGetMyInfo';
 
 interface LayoutHeaderProps {
   children?: React.ReactNode;
-  user?: string;
 }
 
-function LayoutHeader({ children, user }: LayoutHeaderProps) {
+function LayoutHeader({ children }: LayoutHeaderProps) {
+  const { status: userInfoStatus, data: userInfo } = useGetMyInfo();
+  const username =
+    userInfoStatus === 'success' ? !!userInfo && userInfo.result.name : 'test';
   return (
     <Header style={{ padding: 0, background: '#fff' }}>
       <Wrapper>
-        <AuthUser>{user ? user : 'test'} 님</AuthUser>
+        <AuthUser>{username} 님</AuthUser>
         <Button label="로그아웃" property="logout" />
       </Wrapper>
     </Header>

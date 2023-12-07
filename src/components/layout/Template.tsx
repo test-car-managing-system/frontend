@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 interface TemplateProps {
-  children: React.ReactNode;
-  variant: string;
+  children?: React.ReactNode;
+  variant?: string;
 }
 
 function Template({ children, variant }: TemplateProps) {
