@@ -2,31 +2,22 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LongButton from '../../components/button/LongButton';
 import Template from '../../components/layout/Template';
+import LayoutMenu from '../../components/layout/LayoutTemplate';
 
 function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <Template variant="홈">
-      <Wrapper>
-        <Notice>
-          <p>
-            404
-            <br />
-          </p>
-          <p>
-            NOT
-            <br />
-          </p>
-          <p>FOUND</p>
-        </Notice>
-        <LongButton
-          property="default"
-          label="이전 페이지로 가기"
-          onClick={() => navigate(-1)}
-        ></LongButton>
-      </Wrapper>
-    </Template>
+    <Wrapper>
+      <Notice>
+        <p>페이지를 찾을 수 없습니다</p>
+      </Notice>
+      <LongButton
+        property="update"
+        label="이전 페이지로 가기"
+        onClick={() => navigate(-1)}
+      ></LongButton>
+    </Wrapper>
   );
 }
 
@@ -43,7 +34,7 @@ const Wrapper = styled.div`
 const Notice = styled.div`
   margin-bottom: 60px;
   & p {
-    ${({ theme }) => theme.typo.fixed.HomeTitle_T_24_EB}
+    ${({ theme }) => theme.typo.text.T_21_EB}
     font-weight: 500;
     color: ${({ theme }) => theme.palette.main.darkGray};
   }

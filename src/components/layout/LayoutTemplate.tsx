@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CarOutlined,
   PieChartOutlined,
@@ -11,51 +11,13 @@ import {
 import { theme as globalTheme } from '../../common/theme';
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Breadcrumb, Layout, Menu, theme } from 'antd';
-import Button from '../button/Button';
 import styled from 'styled-components';
 import LayoutHeader from './Header';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Content, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem('대시보드', '01', <PieChartOutlined />),
-  getItem('시험차량 관리', '02', <CarOutlined />, [
-    getItem('대여', '021'),
-    getItem('대여 이력', '022'),
-  ]),
-  getItem('차량 관리', '03', <ToolOutlined />, [
-    getItem('차량 관리', '031'),
-    getItem('재고 관리', '032'),
-  ]),
-  getItem('시험장 관리', '04', <FlagOutlined />, [
-    getItem('예약', '041'),
-    getItem('예약 이력', '042'),
-    getItem('시험 수행 이력', '043'),
-    getItem('시험장 관리', '044'),
-  ]),
-  getItem('주유 관리', '05', <ThunderboltOutlined />),
-  getItem('사용자 관리', '06', <TeamOutlined />, [
-    getItem('사용자 조회', '061'),
-    getItem('계정 생성', '062'),
-  ]),
-  getItem('내정보', '07', <UserOutlined />),
-];
 
 interface TemplateProps {
   children?: React.ReactNode;
@@ -63,10 +25,51 @@ interface TemplateProps {
 }
 
 function LayoutMenu({ children, variant }: TemplateProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+  ): MenuItem {
+    return {
+      key,
+      icon,
+      children,
+      label,
+    } as MenuItem;
+  }
+
+  const items: MenuItem[] = [
+    getItem('대시보드', '/', <PieChartOutlined />),
+    getItem('시험차량 관리', 'cars/reservations', <CarOutlined />, [
+      getItem('대여', '/car/reservations/rent'),
+      getItem('대여 이력', '/cars/reservations/history'),
+    ]),
+    getItem('차량 관리', 'cars', <ToolOutlined />, [
+      getItem('차량 관리', '/cars'),
+      getItem('재고 관리', '/cars/stocs'),
+    ]),
+    getItem('시험장 관리', 'tracks', <FlagOutlined />, [
+      getItem('예약', '/tracks/reservations/new'),
+      getItem('예약 이력', '/tracks/reservations'),
+      getItem('시험 수행 이력', '/tracks/tests'),
+      getItem('시험장 관리', '/tracks'),
+    ]),
+    getItem('주유 관리', '/gas', <ThunderboltOutlined />),
+    getItem('사용자 관리', 'members', <TeamOutlined />, [
+      getItem('사용자 조회', '/members'),
+      getItem('계정 생성', '/members/register'),
+    ]),
+    getItem('내정보', '/me', <UserOutlined />),
+  ];
+
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const [selectedKeys, setSelectedKeys] = useState([currentPath]);
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
 
   return (
     <ConfigProvider
@@ -98,9 +101,21 @@ function LayoutMenu({ children, variant }: TemplateProps) {
           onCollapse={(value) => setCollapsed(value)}
           width={220}
         >
-          <Logo>시험차량 관리 시스템</Logo>
-          <div className="demo-logo-vertical" />
-          <Menu defaultSelectedKeys={['01']} mode="inline" items={items} />
+          <Logo onClick={() => navigate('/')}>
+            {!collapsed && '시험차량 관리 시스템'}
+          </Logo>
+          <Menu
+            defaultSelectedKeys={['/']}
+            selectedKeys={selectedKeys}
+            openKeys={openKeys}
+            onOpenChange={(keys) => setOpenKeys(keys)}
+            mode="inline"
+            items={items}
+            onClick={({ item, key, keyPath, domEvent }) => {
+              if (key && key[0] == '/') navigate(key);
+              setSelectedKeys([key]);
+            }}
+          />
         </Sider>
         <Layout>
           <LayoutHeader />
@@ -109,7 +124,6 @@ function LayoutMenu({ children, variant }: TemplateProps) {
               style={{
                 padding: 24,
                 minHeight: 360,
-                background: colorBgContainer,
               }}
             >
               {children}
@@ -122,13 +136,18 @@ function LayoutMenu({ children, variant }: TemplateProps) {
 }
 
 const Logo = styled.div`
+  user-select: none;
   height: 50px;
   width: 100%;
+  color: white;
   display: flex;
   font-size: 16px;
   font-weight: bold;
   justify-content: center;
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default LayoutMenu;
