@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Button from '../../components/button/Button';
 import Template from '../../components/layout/Template';
 import LayoutMenu from '../../components/layout/LayoutTemplate';
-import useGetUserInfo from '../../hooks/useGetMyInfo';
+import useGetUserInfo from '../../hooks/query/useGetMyInfo';
+import Table from '../../components/table/Table';
 
 function Home() {
   const navigate = useNavigate();
@@ -13,19 +14,16 @@ function Home() {
   };
 
   return (
-    <Template>
-      <LayoutMenu>
-        <Wrapper>
-          {/* <SizedBox /> */}
-          <Button
-            property="update"
-            label="대쉬보드"
-            onClick={handleButtonClick}
-          ></Button>
-          <SizedBox />
-        </Wrapper>
-      </LayoutMenu>
-    </Template>
+    <Wrapper>
+      {/* <SizedBox /> */}
+      <Table></Table>
+      <Button
+        property="update"
+        label="대쉬보드"
+        onClick={handleButtonClick}
+      ></Button>
+      <SizedBox />
+    </Wrapper>
   );
 }
 

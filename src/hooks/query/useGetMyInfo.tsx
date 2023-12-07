@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import MembersApi from '../apis/MembersApi';
-import { axiosRequest } from '../apis/axios';
+import MembersApi from '../../apis/MembersApi';
+import { axiosRequest } from '../../apis/axios';
 
 const useGetMyInfo = () => {
   const token = localStorage.getItem('accessToken');

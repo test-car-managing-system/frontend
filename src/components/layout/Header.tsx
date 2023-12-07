@@ -2,13 +2,15 @@ import styled from 'styled-components';
 import { Layout } from 'antd';
 const { Header } = Layout;
 import Button from '../button/Button';
-import useGetMyInfo from '../../hooks/useGetMyInfo';
+import useGetMyInfo from '../../hooks/query/useGetMyInfo';
+import { useNavigate } from 'react-router-dom';
 
 interface LayoutHeaderProps {
   children?: React.ReactNode;
 }
 
 function LayoutHeader({ children }: LayoutHeaderProps) {
+  const navigate = useNavigate();
   const { status: userInfoStatus, data: userInfo } = useGetMyInfo();
   const username =
     userInfoStatus === 'success' ? !!userInfo && userInfo.result.name : 'test';
@@ -16,7 +18,14 @@ function LayoutHeader({ children }: LayoutHeaderProps) {
     <Header style={{ padding: 0, background: '#fff' }}>
       <Wrapper>
         <AuthUser>{username} 님</AuthUser>
-        <Button label="로그아웃" property="logout" />
+        <Button
+          label="로그아웃"
+          property="logout"
+          onClick={() => {
+            localStorage.removeItem('accessToken');
+            navigate('/auth/login');
+          }}
+        />
       </Wrapper>
     </Header>
   );

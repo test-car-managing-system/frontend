@@ -29,7 +29,7 @@ function Button({
   ...props
 }: ButtonProps) {
   return (
-    <Wrapper>
+    <Wrapper property={property}>
       <button onClick={props.onClick}>{label}</button>
     </Wrapper>
   );
@@ -57,7 +57,9 @@ const handleColorType = (
   }
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  property: 'default' | 'update' | 'logout' | 'delete';
+}>`
   width: 300px;
   height: 46px;
   display: flex;
@@ -67,7 +69,7 @@ const Wrapper = styled.div`
 
   button {
     transition: ${({ theme }) => theme.transition.onHover};
-    background-color: ${({ theme }) => theme.palette.main.gray};
+    background-color: ${({ property }) => handleColorType(property)};
     color: ${({ theme }) => theme.palette.main.white};
     ${({ theme }) => {
       const selected = theme.palette.main.darkBlue;
@@ -84,6 +86,7 @@ const Wrapper = styled.div`
     border-radius: 8px;
     width: 100%;
     height: 47px;
+    font-weight: 500;
 
     &:hover {
       background-color: ${({ theme }) => theme.palette.main.darkGray};
