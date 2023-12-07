@@ -11,7 +11,6 @@ import {
 import { theme as globalTheme } from '../../common/theme';
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Breadcrumb, Layout, Menu, theme } from 'antd';
-import Button from '../button/Button';
 import styled from 'styled-components';
 import LayoutHeader from './Header';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -102,8 +101,9 @@ function LayoutMenu({ children, variant }: TemplateProps) {
           onCollapse={(value) => setCollapsed(value)}
           width={220}
         >
-          <Logo onClick={() => navigate('/')}>시험차량 관리 시스템</Logo>
-          <div className="demo-logo-vertical" />
+          <Logo onClick={() => navigate('/')}>
+            {!collapsed && '시험차량 관리 시스템'}
+          </Logo>
           <Menu
             defaultSelectedKeys={['/']}
             selectedKeys={selectedKeys}
@@ -145,6 +145,9 @@ const Logo = styled.div`
   font-weight: bold;
   justify-content: center;
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default LayoutMenu;

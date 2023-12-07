@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button/Button';
-import Template from '../../components/layout/Template';
-import LayoutMenu from '../../components/layout/LayoutTemplate';
-import useGetUserInfo from '../../hooks/query/useGetMyInfo';
-import Table from '../../components/table/Table';
+import { ColumnsType } from 'antd/es/table';
+import CarReservationTable from '../../components/table/CarReservationTable';
+import TrackReservaitonTable from '../../components/table/TrackReservaitonTable';
 
 function Home() {
   const navigate = useNavigate();
@@ -16,13 +15,9 @@ function Home() {
   return (
     <Wrapper>
       {/* <SizedBox /> */}
-      <Table></Table>
-      <Button
-        property="update"
-        label="대쉬보드"
-        onClick={handleButtonClick}
-      ></Button>
+      <CarReservationTable title="시험 차량 대여 현황" />
       <SizedBox />
+      <TrackReservaitonTable title="시험장 대여 현황" />
     </Wrapper>
   );
 }
@@ -30,9 +25,8 @@ function Home() {
 export default Home;
 
 const Wrapper = styled.div`
-  height: calc(var(--vh, 1vh) * 70);
   display: flex;
-  justify-content: center;
+  justify-content: left;
   flex-direction: column;
   align-items: center;
 `;
