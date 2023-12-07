@@ -1,17 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from '../../components/button/Button';
-import { ColumnsType } from 'antd/es/table';
 import CarReservationTable from '../../components/table/CarReservationTable';
 import TrackReservaitonTable from '../../components/table/TrackReservaitonTable';
 
 function Home() {
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    navigate('/question');
-  };
-
   return (
     <Wrapper>
       {/* <SizedBox /> */}

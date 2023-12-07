@@ -5,6 +5,7 @@ import NotFound from './pages/common/NotFound';
 import useApiError from './hooks/useApiError';
 import { useQueryClient } from 'react-query';
 import LayoutMenu from './components/layout/LayoutTemplate';
+import Template from './components/layout/Template';
 
 function App() {
   const location = useLocation();
@@ -21,13 +22,27 @@ function App() {
   });
 
   return (
-    <LayoutMenu>
+    <Template>
       <Routes key={location.pathname} location={location}>
         <Route path="/auth/*" element={<Auth />} />
-        <Route path="/" element={<DashBoard />} />
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="/"
+          element={
+            <LayoutMenu>
+              <DashBoard />
+            </LayoutMenu>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <LayoutMenu>
+              <NotFound />
+            </LayoutMenu>
+          }
+        />
       </Routes>
-    </LayoutMenu>
+    </Template>
   );
 }
 
