@@ -4,11 +4,13 @@ import type { ColumnsType } from 'antd/es/table';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import { TableProps } from './type/TableProps';
 import TableTitle from './TableTitle';
+import useGetMyTrackReservations from '../../hooks/query/useGetTrackReservations';
+import { TrackReservationStatus } from '../../apis/type/track';
 
 interface DataType {
   key: React.Key;
   trackName: string;
-  startedAt: string;
+  createdAt: string;
   reservationStatus: string;
 }
 
@@ -35,20 +37,27 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-// todo : 컬럼명과 데이터를 props 로
-
-const data: DataType[] = [];
-for (let i = 1; i <= 5; i++) {
-  data.push({
-    key: i,
-    trackName: '서산주행시험장',
-    startedAt: '2023-01-13',
-    reservationStatus: '예약완료',
-  });
-}
-
 function TrackReservaitonTable({ title, useSelection }: TableProps) {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const { status: trackReservationsStatus, data: trackReservations } =
+    useGetMyTrackReservations();
+
+  const data: DataType[] = [];
+  if (trackReservationsStatus === 'success' && trackReservations) {
+    const contents = trackReservations.result.contents;
+    const size = Math.min(contents.length, 5);
+    for (let i = 0; i < size; i++) {
+      data.push({
+        key: i + 1,
+        trackName: contents[i].name,
+        createdAt: contents[i].createdAt,
+        reservationStatus:
+          TrackReservationStatus[
+            contents[i].status as unknown as keyof typeof TrackReservationStatus
+          ],
+      });
+    }
+  }
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);

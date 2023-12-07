@@ -4,10 +4,11 @@ import type { ColumnsType } from 'antd/es/table';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import TableTitle from './TableTitle';
 import { TableProps } from './type/TableProps';
+import useGetMyCarReservations from '../../hooks/query/useGetCarReservations';
+import { CarReservationStatus } from '../../apis/type/car';
 
 interface DataType {
   key: React.Key;
-  name: string;
   carName: string;
   stockNumber: string;
   startedAt: string;
@@ -48,22 +49,29 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-// todo : 컬럼명과 데이터를 props 로
-
-const data: DataType[] = [];
-for (let i = 1; i <= 5; i++) {
-  data.push({
-    key: i,
-    name: '노경민',
-    carName: '아반떼',
-    stockNumber: '2023010300001',
-    startedAt: '2023-01-13',
-    expiredAt: '2023-01-20',
-    reservationStatus: '대여중',
-  });
-}
-
 function CarReservationTable({ title, useSelection }: TableProps) {
+  const { status: carReservationsStatus, data: carReservations } =
+    useGetMyCarReservations();
+
+  const data: DataType[] = [];
+  if (carReservationsStatus === 'success' && carReservations) {
+    const contents = carReservations.result.contents;
+    const size = Math.min(contents.length, 5);
+    for (let i = 0; i < size; i++) {
+      data.push({
+        key: i + 1,
+        carName: contents[i].name,
+        stockNumber: contents[i].stockNumber,
+        startedAt: contents[i].startedAt,
+        expiredAt: contents[i].expiredAt,
+        reservationStatus:
+          CarReservationStatus[
+            contents[i].status as unknown as keyof typeof CarReservationStatus
+          ],
+      });
+    }
+  }
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
