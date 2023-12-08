@@ -1,13 +1,12 @@
 import styled from 'styled-components';
 import CarTable from '../../components/table/CarTable';
-import SearchBoard from '../../components/search/SearchBoard';
+import CarSearchBoard from '../../components/search/CarSearchBoard';
+import { SetStateAction, useState } from 'react';
 
 function Car() {
   return (
     <Wrapper>
-      {/* <SizedBox /> */}
-      <SearchBoard></SearchBoard>
-      <CarTable title="검색 결과" />
+      <CarSearchBoard></CarSearchBoard>
     </Wrapper>
   );
 }
@@ -18,5 +17,5 @@ const Wrapper = styled.div``;
 
 const SizedBox = styled.div`
   width: 100%;
-  height: 50px;
+  height: 20px;
 `;
