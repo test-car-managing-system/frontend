@@ -68,7 +68,7 @@ function CarSearchBoard() {
         </Form>
       </Container>
       <VerticalSizedBox />
-      <CarTable title="검색 결과" params={params} />
+      <CarTable title="검색 결과" params={params} usePagenation={true} />
     </>
   );
 }

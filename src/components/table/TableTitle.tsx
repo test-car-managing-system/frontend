@@ -17,7 +17,7 @@ function TableTitle({ children, text }: TableTitleProps) {
 export default TableTitle;
 
 const Title = styled.div`
-  padding: 15px;
+  padding: 15px 15px 15px 0;
   width: 100%;
   ${({ theme }) => theme.typo.text.T_21_EB}
   font-weight: 800;
