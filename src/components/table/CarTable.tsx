@@ -6,9 +6,10 @@ import TableTitle from './TableTitle';
 import { TableProps } from './type/TableProps';
 import { CarType } from '../../apis/type/car';
 import useGetCars from '../../hooks/query/useGetCars';
-import CarApi from '../../apis/CarApi';
 import styled from 'styled-components';
 import { TPageRequest } from '../../apis/type/commonRequest';
+import PageSizeSelect from '../select/PageSizeSelect';
+import Pagination from '../select/Pagination';
 
 interface DataType {
   key: React.Key;
@@ -40,12 +41,20 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-function CarTable({ title, useSelection, usePagenation, params }: TableProps) {
+function CarTable({
+  title,
+  useSelection,
+  usePagenation,
+  maxResult,
+  params,
+}: TableProps) {
   // 페이지네이션 관리
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalPages, setTotalPages] = useState<number>();
-  const [pageParams, setPageParams] = useState<TPageRequest>();
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [pageParams, setPageParams] = useState<TPageRequest>({
+    page: 0,
+    size: 10,
+  });
 
   // 쿼리
   const {
@@ -56,21 +65,28 @@ function CarTable({ title, useSelection, usePagenation, params }: TableProps) {
   const data: DataType[] = [];
 
   useEffect(() => {
-    setPageParams({ page: currentPage, size: pageSize });
-  }, [currentPage, pageSize]);
+    refetch();
+    setTotalElements(
+      cars?.result.totalElements ? cars?.result.totalElements : 0,
+    );
+    setTotalPages(cars?.result.totalPages ? cars?.result.totalPages : 0);
+  }, [params, pageParams, refetch]);
 
   useEffect(() => {
-    refetch();
-    setTotalPages(cars?.result.totalPages);
-  }, [params, pageParams, refetch]);
+    if (carStatus === 'success' && cars) {
+      setTotalElements(cars.result.totalElements || 0);
+      setTotalPages(cars.result.totalPages || 1);
+    }
+  }, [cars, carStatus]);
 
   if (carStatus === 'success' && cars) {
     const contents = cars.result.contents;
-    const size = Math.min(contents.length, 5);
+    const size = maxResult ? maxResult : contents.length;
+    const start = cars.result.page * pageParams.size;
 
     for (let i = 0; i < size; i++) {
       data.push({
-        key: i + 1,
+        key: start + i + 1,
         carName: contents[i].name,
         createdAt: contents[i].createdAt,
         type: CarType[contents[i].type as unknown as keyof typeof CarType],
@@ -95,19 +111,18 @@ function CarTable({ title, useSelection, usePagenation, params }: TableProps) {
     ],
   };
 
-  const pageSelect = (
-    <Select
-      style={{ width: '150px' }}
-      defaultValue={pageSize}
-      onChange={(value, option) => setPageSize(value)}
-    >
-      <Select.Option value={5}>5개씩 보기</Select.Option>
-      <Select.Option value={10}>10개씩 보기</Select.Option>
-      <Select.Option value={20}>20개씩 보기</Select.Option>
-      <Select.Option value={50}>50개씩 보기</Select.Option>
-    </Select>
+  const pageSelect = <PageSizeSelect onchange={setPageParams}></PageSizeSelect>;
+  const pagination = (
+    <PaginationContainer>
+      <Pagination
+        pageSize={pageParams.size}
+        totalElements={totalElements}
+        onchange={setPageParams}
+      ></Pagination>
+    </PaginationContainer>
   );
 
+  // 컴포넌트
   if (useSelection) {
     return (
       <>
@@ -122,6 +137,7 @@ function CarTable({ title, useSelection, usePagenation, params }: TableProps) {
             width: '100%',
           }}
         />
+        {usePagenation && pagination}
       </>
     );
   }
@@ -139,6 +155,7 @@ function CarTable({ title, useSelection, usePagenation, params }: TableProps) {
           width: '100%',
         }}
       />
+      {usePagenation && pagination}
     </>
   );
 }
@@ -149,6 +166,16 @@ const SelectContainer = styled.div`
   width: 100%;
   height: 30px;
   margin-bottom: 20px;
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+`;
+
+const PaginationContainer = styled.div`
+  width: 100%;
+  margin-top: 20px;
   display: flex;
   padding: 5px;
   justify-content: center;

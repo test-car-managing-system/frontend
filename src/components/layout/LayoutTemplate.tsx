@@ -124,6 +124,8 @@ function LayoutMenu({ children, variant }: TemplateProps) {
               style={{
                 padding: 24,
                 minHeight: 360,
+                height: 'calc(93vh - 48px)',
+                overflowY: 'scroll',
               }}
             >
               {children}
