@@ -10,9 +10,11 @@ import styled from 'styled-components';
 import { TPageRequest } from '../../apis/type/commonRequest';
 import PageSizeSelect from '../select/PageSizeSelect';
 import Pagination from '../select/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 interface DataType {
   key: React.Key;
+  id: number;
   carName: string;
   type: CarType;
   createdAt: string;
@@ -87,6 +89,7 @@ function CarTable({
     for (let i = 0; i < size; i++) {
       data.push({
         key: start + i + 1,
+        id: contents[i].id,
         carName: contents[i].name,
         createdAt: contents[i].createdAt,
         type: CarType[contents[i].type as unknown as keyof typeof CarType],
@@ -122,6 +125,17 @@ function CarTable({
     </PaginationContainer>
   );
 
+  // 차량 클릭 시 이동 로직
+  const navigate = useNavigate();
+  const handleRowClick = (record: any) => {
+    navigate(`/cars/detail/${record.id}`);
+  };
+  const onRow = (record: any) => {
+    return {
+      onClick: () => handleRowClick(record),
+    };
+  };
+
   // 컴포넌트
   if (useSelection) {
     return (
@@ -133,6 +147,7 @@ function CarTable({
           columns={columns}
           dataSource={data}
           pagination={false}
+          onRow={onRow}
           style={{
             width: '100%',
           }}
@@ -151,6 +166,7 @@ function CarTable({
         columns={columns}
         dataSource={data}
         pagination={false}
+        onRow={onRow}
         style={{
           width: '100%',
         }}
