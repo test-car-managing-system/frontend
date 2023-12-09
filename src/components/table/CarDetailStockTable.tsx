@@ -16,6 +16,7 @@ import PageSizeSelect from '../select/PageSizeSelect';
 import Pagination from '../select/Pagination';
 import { useNavigate, useParams } from 'react-router-dom';
 import CarApi from '../../apis/CarApi';
+import Button from '../button/Button';
 
 interface DataType {
   key: React.Key;
@@ -49,6 +50,8 @@ const columns: ColumnsType<DataType> = [
 ];
 
 function CarStockTable({ title }: TableProps) {
+  const [updateAvailable, setUpdateAvailable] = useState<boolean>(false);
+  const [deleteAvailable, setDeleteAvailable] = useState<boolean>(false);
   const [carStocks, setCarStocks] = useState<TCarStockResponse[]>();
   const { id } = useParams();
 
@@ -78,20 +81,25 @@ function CarStockTable({ title }: TableProps) {
   }, [carStocks]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
+    if (newSelectedRowKeys && newSelectedRowKeys.length == 1) {
+      setUpdateAvailable(true);
+    } else {
+      setUpdateAvailable(false);
+    }
+
+    if (newSelectedRowKeys && newSelectedRowKeys.length > 0) {
+      setDeleteAvailable(true);
+    } else {
+      setDeleteAvailable(false);
+    }
   };
 
   const rowSelection: TableRowSelection<DataType> = {
     selectedRowKeys,
     onChange: onSelectChange,
-    selections: [
-      BaseTable.SELECTION_ALL,
-      BaseTable.SELECTION_INVERT,
-      BaseTable.SELECTION_NONE,
-    ],
   };
 
   // 차량 클릭 시 이동 로직
@@ -119,6 +127,13 @@ function CarStockTable({ title }: TableProps) {
           width: '100%',
         }}
       />
+      <ButtonContainer>
+        <Button property="update" label="등록" />
+        <HorizontalSizedBox />
+        <Button property="update" label="수정" state={updateAvailable} />
+        <HorizontalSizedBox />
+        <Button property="delete" label="삭제" state={deleteAvailable} />
+      </ButtonContainer>
     </>
   );
 }
@@ -144,4 +159,16 @@ const PaginationContainer = styled.div`
   justify-content: center;
   align-items: center;
   background-color: transparent;
+`;
+
+const HorizontalSizedBox = styled.div`
+  width: 5px;
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  padding-top: 10px;
+  justify-content: right;
+  align-items: center;
 `;

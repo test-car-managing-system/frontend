@@ -30,7 +30,9 @@ function Button({
 }: ButtonProps) {
   return (
     <Wrapper property={property}>
-      <button onClick={props.onClick}>{label}</button>
+      <button onClick={props.onClick} disabled={!state}>
+        {label}
+      </button>
     </Wrapper>
   );
 }
@@ -79,6 +81,11 @@ const Wrapper = styled.div<{
         }
       `;
     }}
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 50%;
+    }
 
     ${({ theme }) => theme.typo.button.Secondary_T_13_EB}
     font-weight: 500;
