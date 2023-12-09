@@ -11,6 +11,7 @@ import CarUpdateModal from '../../components/modal/CarUpdateModal';
 import { AxiosError } from 'axios';
 import { ErrorResponse } from '../../apis/type/commonResponse';
 import ErrorModal from '../../components/modal/ErrorModal';
+import useGetMyInfo from '../../hooks/query/useGetMyInfo';
 
 function CarDetail() {
   const [carDeleteModalOpen, setCarDeleteModalOpen] = useState<boolean>(false);
@@ -20,6 +21,8 @@ function CarDetail() {
   const [car, setCar] = useState<TCarResponse>();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { status, data: user } = useGetMyInfo();
+  const hasRole = user?.result.role == 'ADMIN';
 
   useEffect(() => {
     id &&
@@ -42,7 +45,12 @@ function CarDetail() {
   }, [car]);
 
   const onCarUpdateButtonClick = () => {
-    setCarUpdateModalOpen(true);
+    if (!hasRole) {
+      setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
+      setErrorModalOpen(true);
+    } else {
+      setCarUpdateModalOpen(true);
+    }
   };
 
   const onCarUpdateButtonConfirmClick = (request: TCarRequest) => {
@@ -59,7 +67,12 @@ function CarDetail() {
   };
 
   const onCarDeleteButtonClick = () => {
-    setCarDeleteModalOpen(true);
+    if (!hasRole) {
+      setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
+      setErrorModalOpen(true);
+    } else {
+      setCarDeleteModalOpen(true);
+    }
   };
 
   const onCarDeleteButtonConfirmClick = (id: number) => {
