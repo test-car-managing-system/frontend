@@ -7,6 +7,7 @@ import { TableProps } from './type/TableProps';
 import {
   CarStockStatus,
   CarType,
+  TCarStockRequest,
   TCarStockResponse,
 } from '../../apis/type/car';
 import useGetCars from '../../hooks/query/useGetCars';
@@ -22,6 +23,7 @@ import useGetMyInfo from '../../hooks/query/useGetMyInfo';
 import { ErrorResponse } from '../../apis/type/commonResponse';
 import { AxiosError } from 'axios';
 import ErrorModal from '../modal/ErrorModal';
+import CarStockRegisterModal from '../modal/CarStockRegisterModal';
 
 interface DataType {
   key: React.Key;
@@ -80,6 +82,12 @@ function CarStockTable({ title }: TableProps) {
 
   const [data, setData] = useState<DataType[]>([]);
   const [ids, setIds] = useState<number[]>([]);
+  const [item, setItem] = useState<{
+    id?: number;
+    stockNumber?: string;
+    status?: string;
+  }>();
+
   useEffect(() => {
     const rawData: DataType[] = [];
     carStocks?.forEach((content, index) => {
@@ -101,6 +109,11 @@ function CarStockTable({ title }: TableProps) {
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     const ids = newSelectedRowKeys.map((key) => {
       const item = data.find((d) => d.key === key);
+      setItem({
+        id: item?.id,
+        stockNumber: item?.stockNumber,
+        status: item?.status,
+      });
       return item ? item.id : 0;
     });
     setIds(ids);
@@ -153,6 +166,40 @@ function CarStockTable({ title }: TableProps) {
     }
   };
 
+  const onCarStockRegisterButtonConfirmClick = (request: TCarStockRequest) => {
+    CarApi.postCarStock(request)
+      .then((res) => {
+        id &&
+          CarApi.getCarStocks({ carId: id as unknown as number }).then(
+            (res) => res.result.contents && setCarStocks(res.result.contents),
+          );
+        setCarStockRegisterModalOpen(false);
+        setSelectedRowKeys([]);
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        setErrorMessage(data.message);
+        setErrorModalOpen(true);
+      });
+  };
+
+  const onCarStockUpdateButtonConfirmClick = (request: TCarStockRequest) => {
+    CarApi.updateCarStock(request)
+      .then((res) => {
+        id &&
+          CarApi.getCarStocks({ carId: id as unknown as number }).then(
+            (res) => res.result.contents && setCarStocks(res.result.contents),
+          );
+        setCarStockUpdateModalOpen(false);
+        setSelectedRowKeys([]);
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        setErrorMessage(data.message);
+        setErrorModalOpen(true);
+      });
+  };
+
   const onCarStockDeleteButtonConfirmClick = (ids: number[]) => {
     CarApi.deleteCarStocks(ids)
       .then((res) => {
@@ -173,10 +220,27 @@ function CarStockTable({ title }: TableProps) {
   // 컴포넌트
   return (
     <>
-      <ErrorModal
-        modalOpen={errorModalOpen}
-        content={errorMessage}
-        onCancel={() => setErrorModalOpen(false)}
+      <CarStockRegisterModal
+        title="재고 등록"
+        modalOpen={carStockRegisterModalOpen}
+        onConfirm={(request: TCarStockRequest) =>
+          onCarStockRegisterButtonConfirmClick(request)
+        }
+        onCancel={() => setCarStockRegisterModalOpen(false)}
+        buttonText="등록하기"
+        property="update"
+        carId={parseInt(id ? id : '0')}
+      />
+      <CarStockRegisterModal
+        title="재고 수정"
+        modalOpen={carStockUpdateModalOpen}
+        onConfirm={(request: TCarStockRequest) =>
+          onCarStockUpdateButtonConfirmClick(request)
+        }
+        onCancel={() => setCarStockUpdateModalOpen(false)}
+        defaultValues={item}
+        buttonText="수정하기"
+        property="update"
       />
       <ConfirmModal
         title="재고 삭제"
@@ -186,6 +250,11 @@ function CarStockTable({ title }: TableProps) {
         onCancel={() => setCarStockDeleteModalOpen(false)}
         buttonText="삭제하기"
         property="delete"
+      />
+      <ErrorModal
+        modalOpen={errorModalOpen}
+        content={errorMessage}
+        onCancel={() => setErrorModalOpen(false)}
       />
       <TableTitle text={title} />
       <BaseTable

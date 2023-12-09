@@ -28,6 +28,13 @@ export enum CarType {
   NULL = '없음',
 }
 
+export interface TCarStockRequest {
+  id?: number;
+  carId?: number;
+  stockNumber?: string;
+  status?: string;
+}
+
 export interface TCarStockResponse {
   id: number;
   name: string;

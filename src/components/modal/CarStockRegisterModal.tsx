@@ -1,44 +1,59 @@
-import { Form, Input, Modal } from 'antd';
+import { Form, Input, Modal, Select } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
 import ConfirmButton from '../button/ConfirmButton';
-import { CarType, TCarRequest, TCarResponse } from '../../apis/type/car';
+import {
+  CarStockStatus,
+  CarType,
+  TCarRequest,
+  TCarResponse,
+  TCarStockRequest,
+  TCarStockResponse,
+} from '../../apis/type/car';
 import mapKoreanToCarType from '../../apis/util/mapToKorCarType';
 import { useEffect, useState } from 'react';
 import parseKorToCarType from '../../apis/util/parseKorToCarType';
+import parseKorToCarStockStatus from '../../apis/util/parseKorToCarStockStatus';
+import { useParams } from 'react-router-dom';
 
 interface ConfirmModalProps {
   title: string;
-  content: string;
   modalOpen: boolean;
   onConfirm?: (data: TCarRequest) => any;
   onCancel?: () => any;
   buttonText: string;
-  defaultValues?: TCarResponse;
+  carId?: number;
+  defaultValues?: {
+    id?: number;
+    stockNumber?: string;
+    status?: string;
+  };
   property?: 'default' | 'update' | 'logout' | 'delete';
 }
 
-function ConfirmModal({
+function CarStockRegisterModal({
   modalOpen,
   onConfirm,
   onCancel,
   title,
+  carId,
   defaultValues,
   buttonText,
   property = 'default',
 }: ConfirmModalProps) {
   const [form] = Form.useForm();
-  const [request, setRequest] = useState<TCarRequest>();
+  const [request, setRequest] = useState<TCarStockRequest>();
+  const [selectOption, setSelectOption] = useState<string>('AVAILABLE');
+
   const onUpdateButtonClick = () => {
     const formValues = form.getFieldsValue();
-    const name = formValues['name'];
-    const type = formValues['type'];
-    const displacement = formValues['displacement'];
-    const request: TCarRequest = {
+    const stockNumber = formValues['stockNumber'];
+    const status = selectOption;
+    const request: TCarStockRequest = {
       id: defaultValues?.id,
-      name: name,
-      type: type ? parseKorToCarType(type) : 'null',
-      displacement: displacement ? parseFloat(displacement) : 0,
+      carId: carId,
+      stockNumber: stockNumber,
+      status: status,
     };
     setRequest(request);
   };
@@ -68,14 +83,11 @@ function ConfirmModal({
         <Container>
           <Form
             initialValues={{
-              name: defaultValues?.name,
-              type: CarType[
-                defaultValues?.type as unknown as keyof typeof CarType
-              ],
-              displacement: defaultValues?.displacement,
+              stockNumber: defaultValues?.stockNumber,
+              status: defaultValues?.status,
             }}
             size="middle"
-            name="updateCar"
+            name="registerCar"
             labelAlign="left"
             labelCol={{ span: 4 }}
             form={form}
@@ -85,28 +97,31 @@ function ConfirmModal({
             }}
           >
             <Form.Item
-              name="name"
-              label="차량명"
+              name="stockNumber"
+              label="재고번호"
               wrapperCol={{ offset: 2 }}
-              rules={[{ required: true, message: '차량명을 입력하세요' }]}
+              rules={[{ required: true, message: '재고번호를 입력하세요' }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              name="type"
-              label="차종"
+              name="status"
+              label="재고상태"
               wrapperCol={{ offset: 2 }}
-              rules={[{ required: true, message: '차종을 입력하세요' }]}
+              rules={[{ required: true, message: '재고상태를 선택하세요' }]}
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="displacement"
-              label="배기량"
-              wrapperCol={{ offset: 2 }}
-              rules={[{ required: true, message: '배기량을 입력하세요' }]}
-            >
-              <Input />
+              <Select
+                style={{ width: '150px' }}
+                defaultValue={'AVAILABLE'}
+                onChange={(value, option) => {
+                  setSelectOption(value);
+                }}
+              >
+                <Select.Option value={'AVAILABLE'}>대여가능</Select.Option>
+                <Select.Option value={'INSPECTION'}>검수중</Select.Option>
+                <Select.Option value={'RESERVED'}>대여중</Select.Option>
+                <Select.Option value={'UNAVAILABLE'}>폐기</Select.Option>
+              </Select>
             </Form.Item>
           </Form>
         </Container>
@@ -115,7 +130,7 @@ function ConfirmModal({
   );
 }
 
-export default ConfirmModal;
+export default CarStockRegisterModal;
 
 const Title = styled.div`
   ${({ theme }) => theme.typo.text.T_18_EB};
