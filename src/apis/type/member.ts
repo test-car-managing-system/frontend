@@ -23,6 +23,14 @@ export interface TUpdateMemberRequest {
   role?: string;
 }
 
+export interface TRegisterMemberRequest {
+  name?: string;
+  password?: string;
+  email?: string;
+  departmentId?: number;
+  role?: string;
+}
+
 export enum Role {
   USER = '사용자',
   ADMIN = '관리자',

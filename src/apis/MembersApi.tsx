@@ -3,6 +3,7 @@ import { TPageResponse, TResponseType } from './type/commonResponse';
 import {
   IMembersRes,
   TMemberRequestParams,
+  TRegisterMemberRequest,
   TUpdateMemberRequest,
 } from './type/member';
 
@@ -30,6 +31,22 @@ const MembersApi = {
   // 사용자 상세 정보 가져오기
   getMemberDetail: async (id: number): Promise<TResponseType<IMembersRes>> => {
     const { data } = await axiosRequest.get(`/members/${id}`);
+    return data;
+  },
+
+  // 사용자 생성
+  postMember: async (
+    request: TRegisterMemberRequest,
+  ): Promise<TResponseType<IMembersRes>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.post(`/members/register`, {
+      name: request?.name,
+      password: request.password,
+      email: request?.email,
+      departmentId: request?.departmentId,
+      role: request?.role,
+    });
     return data;
   },
 

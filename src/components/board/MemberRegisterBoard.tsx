@@ -2,41 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { DatePicker, Form, Input, Select } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
-import CarTable from '../table/CarTable';
-import { CarType, TCarRequest, TCarRequestParams } from '../../apis/type/car';
-import mapKoreanToCarType from '../../apis/util/mapToKorCarType';
 import CarApi from '../../apis/CarApi';
 import ErrorModal from '../modal/ErrorModal';
 import { ErrorResponse } from '../../apis/type/commonResponse';
 import { AxiosError } from 'axios';
 import AlertModal from '../modal/AlertModal';
+import {
+  Role,
+  TRegisterMemberRequest,
+  TUpdateMemberRequest,
+} from '../../apis/type/member';
+import DepartmentApi from '../../apis/DeparmentApi';
+import MembersApi from '../../apis/MembersApi';
 
-const { RangePicker } = DatePicker;
-
-function CarSearchBoard() {
-  const [request, setRequest] = useState<TCarRequest>();
+function MemberRegisterBoard() {
+  const [request, setRequest] = useState<TUpdateMemberRequest>();
   const [form] = Form.useForm();
-  const [selectOption, setSelectOption] = useState<string>('SEDAN');
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
 
   const handleRegisterButtonClick = () => {
     const formValues = form.getFieldsValue();
-    const name = formValues['carName'];
-    const type = selectOption;
-    const displacement = formValues['displacement'];
-    const request: TCarRequest = {
+    const email = formValues['email'];
+    const password = formValues['password'];
+    const name = formValues['name'];
+    const request: TRegisterMemberRequest = {
       name,
-      type,
-      displacement,
+      password,
+      email,
+      departmentId: departmentSelected ?? formValues['department'],
+      role: roleSelected ?? formValues['role'],
     };
     setRequest(request);
   };
 
   useEffect(() => {
     request &&
-      CarApi.postCar(request)
+      MembersApi.postMember(request)
         .then((res) => {
           setAlertModalOpen(true);
         })
@@ -47,17 +50,43 @@ function CarSearchBoard() {
         });
   }, [request]);
 
-  const options = [];
-  for (const [key, value] of Object.entries(CarType)) {
-    options.push(<Select.Option value={key}>{value}</Select.Option>);
-  }
+  const [departments, setDepartments] = useState<
+    { id: number; name: string }[]
+  >([]);
+
+  useEffect(() => {
+    DepartmentApi.getDepartments().then((res) => {
+      const rawData: { id: number; name: string }[] = [];
+      res.result.forEach((department) => {
+        rawData.push({
+          id: department.id,
+          name: department.name,
+        });
+      });
+      setDepartments(rawData);
+    });
+  }, []);
+
+  const departmentSelect = departments.map((department) => (
+    <Select.Option key={department.id} value={department.id}>
+      {department.name}
+    </Select.Option>
+  ));
+
+  const roleSelect = Object.entries(Role).map(([key, value]) => (
+    <Select.Option key={key} value={key}>
+      {value}
+    </Select.Option>
+  ));
+  const [departmentSelected, setDepartmentSelected] = useState<number>();
+  const [roleSelected, setRoleSelected] = useState<string>();
 
   return (
     <>
       <AlertModal
         modalOpen={alertModalOpen}
-        title={'차량 등록 알림'}
-        content={'차량을 성공적으로 등록했습니다!'}
+        title={'사용자 등록 알림'}
+        content={'사용자를 성공적으로 등록했습니다!'}
         onCancel={() => setAlertModalOpen(false)}
       />
       <ErrorModal
@@ -75,36 +104,58 @@ function CarSearchBoard() {
           style={{ justifyContent: 'center', width: '80%', fontWeight: '700' }}
         >
           <Form.Item
-            name="carName"
-            label="차량명"
+            name="email"
+            label="아이디"
             wrapperCol={{ offset: 2 }}
-            rules={[{ required: true, message: '차량명을 입력하세요' }]}
+            rules={[{ required: true, message: '아이디를 입력하세요' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name="carType"
-            label="차종"
+            name="password"
+            label="비밀번호"
             wrapperCol={{ offset: 2 }}
-            rules={[{ required: true, message: '차종을 선택하세요' }]}
+            rules={[{ required: true, message: '비밀번호를 입력하세요' }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="이름"
+            wrapperCol={{ offset: 2 }}
+            rules={[{ required: true, message: '이름을 입력하세요' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="department"
+            label="부서"
+            wrapperCol={{ offset: 2 }}
+            rules={[{ required: true, message: '부서를 선택하세요' }]}
           >
             <Select
               style={{ width: '150px' }}
-              defaultValue={'SEDAN'}
               onChange={(value, option) => {
-                setSelectOption(value);
+                setDepartmentSelected(value);
               }}
             >
-              {options}
+              {departmentSelect}
             </Select>
           </Form.Item>
           <Form.Item
-            name="displacement"
-            label="배기량"
+            name="role"
+            label="권한"
             wrapperCol={{ offset: 2 }}
-            rules={[{ required: true, message: '배기량을 입력하세요' }]}
+            rules={[{ required: true, message: '권한을 선택하세요' }]}
           >
-            <Input />
+            <Select
+              style={{ width: '150px' }}
+              onChange={(value, option) => {
+                setRoleSelected(value);
+              }}
+            >
+              {roleSelect}
+            </Select>
           </Form.Item>
         </Form>
       </Container>
@@ -119,7 +170,7 @@ function CarSearchBoard() {
   );
 }
 
-export default CarSearchBoard;
+export default MemberRegisterBoard;
 
 const Container = styled.div`
   width: 100%;
