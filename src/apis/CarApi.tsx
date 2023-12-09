@@ -1,5 +1,6 @@
 import { axiosRequest } from './axios';
 import {
+  TCarRequest,
   TCarRequestParams,
   TCarReservationsResponse,
   TCarResponse,
@@ -35,6 +36,20 @@ const CarApi = {
     const token = localStorage.getItem('accessToken');
     axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const { data } = await axiosRequest.get(`/cars/${id}`);
+    return data;
+  },
+
+  // 차량 정보 업데이트
+  updateCarDetail: async (
+    request: TCarRequest,
+  ): Promise<TResponseType<TCarResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.patch(`/cars/${request.id}`, {
+      name: request.name,
+      type: request.type,
+      displacement: request.displacement,
+    });
     return data;
   },
 

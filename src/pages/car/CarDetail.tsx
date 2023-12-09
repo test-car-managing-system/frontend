@@ -3,41 +3,103 @@ import Info from '../../components/info/Info';
 import { useEffect, useState } from 'react';
 import CarApi from '../../apis/CarApi';
 import { useParams } from 'react-router-dom';
-import { CarType, TCarResponse } from '../../apis/type/car';
+import { CarType, TCarRequest, TCarResponse } from '../../apis/type/car';
 import Button from '../../components/button/Button';
 import CarStockTable from '../../components/table/CarDetailStockTable';
+import ConfirmModal from '../../components/modal/ConfirmModal';
+import CarUpdateModal from '../../components/modal/CarUpdateModal';
+import { AxiosError } from 'axios';
+import { ErrorResponse } from '../../apis/type/commonResponse';
+import ErrorModal from '../../components/modal/ErrorModal';
 
 function CarDetail() {
-  const [cars, setCars] = useState<TCarResponse>();
+  const [carDeleteModalOpen, setCarDeleteModalOpen] = useState<boolean>(false);
+  const [carUpdateModalOpen, setCarUpdateModalOpen] = useState<boolean>(false);
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [car, setCar] = useState<TCarResponse>();
   const { id } = useParams();
 
   useEffect(() => {
     id &&
       CarApi.getCarDetail(id as unknown as number).then(
-        (res) => res.result && setCars(res.result),
+        (res) => res.result && setCar(res.result),
       );
   }, []);
 
   const [data, setData] = useState<{ title: string; data?: string }[]>();
   useEffect(() => {
     setData([
-      { title: '차량명', data: cars?.name },
-      { title: '등록일자', data: cars?.createdAt },
+      { title: '차량명', data: car?.name },
+      { title: '등록일자', data: car?.createdAt },
       {
         title: '차종',
-        data: CarType[cars?.type as unknown as keyof typeof CarType],
+        data: CarType[car?.type as unknown as keyof typeof CarType],
       },
-      { title: '배기량', data: cars?.displacement.toString() },
+      { title: '배기량', data: car?.displacement.toString() },
     ]);
-  }, [cars]);
+  }, [car]);
+
+  const onCarUpdateButtonClick = () => {
+    setCarUpdateModalOpen(true);
+  };
+
+  const onCarUpdateButtonConfirmClick = (request: TCarRequest) => {
+    CarApi.updateCarDetail(request)
+      .then((res) => {
+        res.result && setCar(res.result);
+        setCarUpdateModalOpen(false);
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        setErrorMessage(data.message);
+        setErrorModalOpen(true);
+      });
+  };
+
+  const onCarDeleteButtonClick = () => {
+    setCarDeleteModalOpen(true);
+  };
 
   return (
     <Wrapper>
+      <ErrorModal
+        modalOpen={errorModalOpen}
+        content={errorMessage}
+        onCancel={() => setErrorModalOpen(false)}
+      />
+      <CarUpdateModal
+        title="차량 수정"
+        content="해당 차량을 수정하시겠습니까?"
+        modalOpen={carUpdateModalOpen}
+        onConfirm={(data: TCarRequest) => onCarUpdateButtonConfirmClick(data)}
+        onCancel={() => setCarUpdateModalOpen(false)}
+        buttonText="수정하기"
+        property="update"
+        defaultValues={car}
+      />
+      <ConfirmModal
+        title="차량 삭제"
+        content="해당 차량을 삭제하시겠습니까?"
+        modalOpen={carDeleteModalOpen}
+        onConfirm={() => setCarDeleteModalOpen(false)}
+        onCancel={() => setCarDeleteModalOpen(false)}
+        buttonText="삭제하기"
+        property="delete"
+      />
       <Info title="차량 정보" contents={data}></Info>
       <ButtonContainer>
-        <Button property="update" label="수정" />
+        <Button
+          property="update"
+          label="수정"
+          onClick={() => onCarUpdateButtonClick()}
+        />
         <HorizontalSizedBox />
-        <Button property="delete" label="삭제" />
+        <Button
+          property="delete"
+          label="삭제"
+          onClick={() => onCarDeleteButtonClick()}
+        />
       </ButtonContainer>
       <Container>
         <CarStockTable title="재고 조회" />

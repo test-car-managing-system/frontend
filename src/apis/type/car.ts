@@ -13,6 +13,13 @@ export interface TCarRequestParams {
   endDate?: string;
 }
 
+export interface TCarRequest {
+  id?: number;
+  name?: string;
+  type?: string;
+  displacement?: number;
+}
+
 export enum CarType {
   SEDAN = '세단',
   SUV = 'SUV',

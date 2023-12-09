@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Table as BaseTable, Form, Select } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import type { TableRowSelection } from 'antd/es/table/interface';
+import { Table as BaseTable } from 'antd';
+import type { ColumnsType, TableRowSelection } from 'antd/es/table/interface';
 import TableTitle from './TableTitle';
 import { TableProps } from './type/TableProps';
-import {
-  CarStockStatus,
-  CarType,
-  TCarStockResponse,
-} from '../../apis/type/car';
-import useGetCars from '../../hooks/query/useGetCars';
-import styled from 'styled-components';
-import { TPageRequest } from '../../apis/type/commonRequest';
-import PageSizeSelect from '../select/PageSizeSelect';
-import Pagination from '../select/Pagination';
+import { CarStockStatus, TCarStockResponse } from '../../apis/type/car';
 import { useNavigate, useParams } from 'react-router-dom';
 import CarApi from '../../apis/CarApi';
 import Button from '../button/Button';
 import ConfirmModal from '../modal/ConfirmModal';
+import styled from 'styled-components';
 
 interface DataType {
   key: React.Key;
@@ -53,12 +44,7 @@ const columns: ColumnsType<DataType> = [
 function CarStockTable({ title }: TableProps) {
   const [updateAvailable, setUpdateAvailable] = useState<boolean>(false);
   const [deleteAvailable, setDeleteAvailable] = useState<boolean>(false);
-  const [carStockDeleteModalOpen, setCarStockDeleteModalOpen] =
-    useState<boolean>(false);
-  const [carStockRegisterModalOpen, setCarStockRegisterModalOpen] =
-    useState<boolean>(false);
-  const [carStockUpdateModalOpen, setCarStockUpdateModalOpen] =
-    useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [carStocks, setCarStocks] = useState<TCarStockResponse[]>();
   const { id } = useParams();
 
@@ -87,10 +73,8 @@ function CarStockTable({ title }: TableProps) {
     setData(rawData);
   }, [carStocks]);
 
-  const onCarStockDeleteButtonClick = () => {
-    setCarStockDeleteModalOpen(true);
-  };
-
+  // const onCarStockDeleteButtonClick = () => {
+  // }
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -127,15 +111,6 @@ function CarStockTable({ title }: TableProps) {
   // 컴포넌트
   return (
     <>
-      <ConfirmModal
-        title="재고 삭제"
-        content="해당 재고를 삭제하시겠습니까"
-        modalOpen={carStockDeleteModalOpen}
-        onConfirm={() => setCarStockDeleteModalOpen(false)}
-        onCancel={() => setCarStockDeleteModalOpen(false)}
-        buttonText="삭제하기"
-        property="delete"
-      />
       <TableTitle text={title} />
       <BaseTable
         rowSelection={rowSelection}
@@ -147,20 +122,6 @@ function CarStockTable({ title }: TableProps) {
           width: '100%',
         }}
       />
-      <ButtonContainer>
-        <Button property="update" label="등록" />
-        <HorizontalSizedBox />
-        <Button property="update" label="수정" state={updateAvailable} />
-        <HorizontalSizedBox />
-        <Button
-          property="delete"
-          label="삭제"
-          state={deleteAvailable}
-          onClick={() => {
-            deleteAvailable && onCarStockDeleteButtonClick();
-          }}
-        />
-      </ButtonContainer>
     </>
   );
 }
