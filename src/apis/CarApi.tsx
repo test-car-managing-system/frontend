@@ -40,6 +40,20 @@ const CarApi = {
     return data;
   },
 
+  // 차량 등록
+  postCar: async (
+    request: TCarRequest,
+  ): Promise<TResponseType<TCarResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.post(`/cars/register`, {
+      name: request.name,
+      type: request.type,
+      displacement: request.displacement,
+    });
+    return data;
+  },
+
   // 차량 정보 업데이트
   updateCarDetail: async (
     request: TCarRequest,

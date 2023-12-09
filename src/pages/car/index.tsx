@@ -1,11 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Car from './Car';
 import CarDetail from './CarDetail';
+import CarRegister from './CarRegister';
 
 const Auth = () => {
   return (
     <Routes>
       <Route path="/" element={<Car />} />
+      <Route path="/register" element={<CarRegister />} />
       <Route path="/detail/:id" element={<CarDetail />} />
       <Route path="/*" element={<Navigate to="/404" />} />
     </Routes>

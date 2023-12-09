@@ -51,7 +51,8 @@ function LayoutMenu({ children, variant }: TemplateProps) {
     ]),
     getItem('차량 관리', 'cars', <ToolOutlined />, [
       getItem('차량 관리', '/cars'),
-      getItem('재고 관리', '/cars/stocs'),
+      getItem('차량 등록', '/cars/register'),
+      getItem('재고 관리', '/cars/stocks'),
     ]),
     getItem('시험장 관리', 'tracks', <FlagOutlined />, [
       getItem('예약', '/tracks/reservations/new'),

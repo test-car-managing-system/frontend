@@ -1,15 +1,16 @@
 import styled from 'styled-components';
 import CarSearchBoard from '../../components/board/CarSearchBoard';
+import CarRegisterBoard from '../../components/board/CarRegisterBoard';
 
-function Car() {
+function CarRegister() {
   return (
     <Wrapper>
-      <CarSearchBoard></CarSearchBoard>
+      <CarRegisterBoard />
     </Wrapper>
   );
 }
 
-export default Car;
+export default CarRegister;
 
 const Wrapper = styled.div``;
 
