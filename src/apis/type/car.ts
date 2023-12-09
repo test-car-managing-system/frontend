@@ -38,6 +38,7 @@ export interface TCarStockRequest {
 export interface TCarStockResponse {
   id: number;
   name: string;
+  type: CarType;
   stockNumber: string;
   createdAt: string;
   status: CarStockStatus;
@@ -47,7 +48,7 @@ export interface TCarStockRequestParams {
   carId?: number;
   name?: string;
   stockNumber?: string;
-  status?: CarStockStatus;
+  status?: string;
 }
 
 export enum CarStockStatus {

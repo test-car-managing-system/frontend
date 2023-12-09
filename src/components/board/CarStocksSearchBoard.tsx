@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
-import { DatePicker, Form, Input } from 'antd';
+import { DatePicker, Form, Input, Select } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
-import CarTable from '../table/CarTable';
-import { TCarRequestParams } from '../../apis/type/car';
-import mapKoreanToCarType from '../../apis/util/mapToKorCarType';
+import {
+  CarStockStatus,
+  TCarRequestParams,
+  TCarStockRequestParams,
+} from '../../apis/type/car';
+import CarStockTable from '../table/CarStockTable';
 
 const { RangePicker } = DatePicker;
 
-function CarSearchBoard() {
-  const [params, setParams] = useState<TCarRequestParams>();
+function CarStocksSearchBoard() {
+  const [params, setParams] = useState<TCarRequestParams | undefined>();
+  const [selectOption, setSelectOption] = useState<string>();
   const [form] = Form.useForm();
   const handleSearchButtonClick = () => {
     const formValues = form.getFieldsValue();
-    const name = formValues['carName'];
-    const type = mapKoreanToCarType(formValues['carType']);
-    const date = formValues['range-picker'];
-    const startDate = date && date[0].format('YYYY-MM-DD');
-    const endDate = date && date[1]?.format('YYYY-MM-DD');
-    const params: TCarRequestParams = {
+    const name = formValues['name'];
+    const stockNumber = formValues['stockNumber'];
+    const status = selectOption;
+    const params: TCarStockRequestParams = {
       name,
-      type,
-      startDate,
-      endDate,
+      stockNumber,
+      status,
     };
     setParams(params);
   };
@@ -31,6 +32,11 @@ function CarSearchBoard() {
     form.resetFields();
     setParams(undefined);
   };
+
+  const options = [];
+  for (const [key, value] of Object.entries(CarStockStatus)) {
+    options.push(<Select.Option value={key}>{value}</Select.Option>);
+  }
 
   return (
     <>
@@ -43,18 +49,26 @@ function CarSearchBoard() {
           form={form}
           style={{ justifyContent: 'center', width: '80%', fontWeight: '700' }}
         >
-          <Form.Item name="carName" label="차량명" wrapperCol={{ offset: 2 }}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="carType" label="차종" wrapperCol={{ offset: 2 }}>
+          <Form.Item name="name" label="차량명" wrapperCol={{ offset: 2 }}>
             <Input />
           </Form.Item>
           <Form.Item
-            name="range-picker"
-            label="기간"
+            name="stockNumber"
+            label="재고번호"
             wrapperCol={{ offset: 2 }}
           >
-            <RangePicker />
+            <Input />
+          </Form.Item>
+          <Form.Item name="status" label="재고상태" wrapperCol={{ offset: 2 }}>
+            <Select
+              style={{ width: '150px' }}
+              defaultValue={'AVAILABLE'}
+              onChange={(value, option) => {
+                setSelectOption(value);
+              }}
+            >
+              {options}
+            </Select>
           </Form.Item>
           <Divider />
           <ButtonContainer>
@@ -69,12 +83,12 @@ function CarSearchBoard() {
         </Form>
       </Container>
       <VerticalSizedBox />
-      <CarTable title="검색 결과" params={params} usePagenation={true} />
+      <CarStockTable title="검색 결과" params={params} usePagenation={false} />
     </>
   );
 }
 
-export default CarSearchBoard;
+export default CarStocksSearchBoard;
 
 const Container = styled.div`
   width: 100%;

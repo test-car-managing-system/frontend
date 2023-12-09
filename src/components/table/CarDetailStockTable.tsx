@@ -56,7 +56,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-function CarStockTable({ title }: TableProps) {
+function CarStockTable({ title, params }: TableProps) {
   const [updateAvailable, setUpdateAvailable] = useState<boolean>(false);
   const [deleteAvailable, setDeleteAvailable] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
