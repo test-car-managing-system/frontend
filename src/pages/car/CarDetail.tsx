@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import CarApi from '../../apis/CarApi';
 import { useParams } from 'react-router-dom';
 import { CarType, TCarResponse } from '../../apis/type/car';
+import Button from '../../components/button/Button';
+import CarStockTable from '../../components/table/CarDetailStockTable';
 
 function CarDetail() {
   const [cars, setCars] = useState<TCarResponse>();
@@ -32,6 +34,14 @@ function CarDetail() {
   return (
     <Wrapper>
       <Info title="차량 정보" contents={data}></Info>
+      <ButtonContainer>
+        <Button property="update" label="수정" />
+        <HorizontalSizedBox />
+        <Button property="delete" label="삭제" />
+      </ButtonContainer>
+      <Container>
+        <CarStockTable title="재고 조회" />
+      </Container>
     </Wrapper>
   );
 }
@@ -40,7 +50,18 @@ export default CarDetail;
 
 const Wrapper = styled.div``;
 
-const SizedBox = styled.div`
+const Container = styled.div`
+  overflow-y: scroll;
+`;
+
+const HorizontalSizedBox = styled.div`
+  width: 5px;
+`;
+
+const ButtonContainer = styled.div`
   width: 100%;
-  height: 20px;
+  display: flex;
+  padding-top: 10px;
+  justify-content: right;
+  align-items: center;
 `;

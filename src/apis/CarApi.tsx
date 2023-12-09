@@ -3,6 +3,8 @@ import {
   TCarRequestParams,
   TCarReservationsResponse,
   TCarResponse,
+  TCarStockRequestParams,
+  TCarStockResponse,
 } from './type/car';
 import { TPageRequest } from './type/commonRequest';
 import { TPageResponse, TResponseType } from './type/commonResponse';
@@ -33,6 +35,26 @@ const CarApi = {
     const token = localStorage.getItem('accessToken');
     axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const { data } = await axiosRequest.get(`/cars/${id}`);
+    return data;
+  },
+
+  // 차량 관리 차량 재고 조회
+  getCarStocks: async (
+    params?: TCarStockRequestParams,
+    page?: TPageRequest,
+  ): Promise<TResponseType<TPageResponse<TCarStockResponse[]>>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/cars/stocks', {
+      params: {
+        carId: params?.carId,
+        name: params?.name,
+        stockNumber: params?.stockNumber,
+        status: params?.status,
+        page: page?.page,
+        size: page?.size,
+      },
+    });
     return data;
   },
 

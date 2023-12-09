@@ -21,6 +21,28 @@ export enum CarType {
   NULL = '없음',
 }
 
+export interface TCarStockResponse {
+  id: number;
+  name: string;
+  stockNumber: string;
+  createdAt: string;
+  status: CarStockStatus;
+}
+
+export interface TCarStockRequestParams {
+  carId?: number;
+  name?: string;
+  stockNumber?: string;
+  status?: CarStockStatus;
+}
+
+export enum CarStockStatus {
+  AVAILABLE = '대여가능',
+  INSPECTION = '검수중',
+  RESERVED = '대여중',
+  UNAVAILABLE = '폐기',
+}
+
 export interface TCarReservationsResponse {
   id: number;
   name: string;
