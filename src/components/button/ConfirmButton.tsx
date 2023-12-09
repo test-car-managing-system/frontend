@@ -30,9 +30,7 @@ function Button({
 }: ButtonProps) {
   return (
     <Wrapper property={property}>
-      <button onClick={props.onClick} disabled={!state}>
-        {label}
-      </button>
+      <button onClick={props.onClick}>{label}</button>
     </Wrapper>
   );
 }
@@ -62,8 +60,8 @@ const handleColorType = (
 const Wrapper = styled.div<{
   property: 'default' | 'update' | 'logout' | 'delete';
 }>`
-  width: 76px;
-  height: 46px;
+  width: 167px;
+  height: 53px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,17 +80,13 @@ const Wrapper = styled.div<{
       `;
     }}
 
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 50%;
-    }
-
-    ${({ theme }) => theme.typo.button.Secondary_T_13_EB}
-    font-weight: 500;
+    ${({ theme }) => theme.typo.button.Primary_T_15_EB}
+    font-weight: 300;
 
     border-radius: 8px;
     width: 100%;
-    height: 40px;
+    height: 47px;
+    font-weight: 500;
 
     &:hover {
       opacity: 80%;

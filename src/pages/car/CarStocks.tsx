@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import CarSearchBoard from '../../components/board/CarSearchBoard';
+import CarStocksSearchBoard from '../../components/board/CarStocksSearchBoard';
 
 function Car() {
   return (
     <Wrapper>
-      <CarSearchBoard></CarSearchBoard>
+      <CarStocksSearchBoard />
     </Wrapper>
   );
 }

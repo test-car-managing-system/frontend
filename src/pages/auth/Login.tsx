@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Template from '../../components/layout/Template';
 import { axiosRequest } from '../../apis/axios';
@@ -6,6 +6,9 @@ import styled from 'styled-components';
 import AuthApi from '../../apis/AuthApi';
 import { TLoginRequestType } from '../../apis/type/auth';
 import { useNavigate } from 'react-router-dom';
+import ErrorModal from '../../components/modal/ErrorModal';
+import { AxiosError } from 'axios';
+import { ErrorResponse } from '../../apis/type/commonResponse';
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
@@ -26,20 +29,30 @@ const Login = () => {
       password: values.password,
     };
 
-    try {
-      const res = await AuthApi.login(loginRequest);
-      const token = res.result.accessToken;
-      localStorage.setItem('accessToken', token);
-      axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      navigate('/');
-    } catch (error) {
-      console.error('Login failed:', error);
-      // 에러 처리 로직
-    }
+    await AuthApi.login(loginRequest)
+      .then((res) => {
+        const token = res.result.accessToken;
+        localStorage.setItem('accessToken', token);
+        axiosRequest.defaults.headers.common['Authorization'] =
+          `Bearer ${token}`;
+        navigate('/');
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        setErrorMessage(data.message);
+        setErrorModalOpen(true);
+      });
   };
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   return (
     <Template>
+      <ErrorModal
+        modalOpen={errorModalOpen}
+        content={errorMessage}
+        onCancel={() => setErrorModalOpen(false)}
+      />
       <Container>
         <Title>시험차량 관리 시스템</Title>
         <Form

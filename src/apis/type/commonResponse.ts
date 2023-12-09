@@ -11,3 +11,11 @@ export type TPageResponse<T> = {
   totalPages: number;
   contents: T;
 };
+
+export type ErrorResponse = {
+  status: number;
+  success: boolean;
+  message: string;
+  code: string;
+  errors: object[];
+};

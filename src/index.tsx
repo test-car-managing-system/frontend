@@ -8,15 +8,12 @@ import { GlobalStyle } from './common/global-theme';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LayoutMenu from './components/layout/LayoutTemplate';
 import Auth from './pages/auth';
-import Car from './pages/car';
-import DashBoard from './pages/dashboard/DashBoard';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
 const queryClient = new QueryClient();
-
 root.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
