@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Info from '../../components/info/Info';
 import { useEffect, useState } from 'react';
 import CarApi from '../../apis/CarApi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CarType, TCarRequest, TCarResponse } from '../../apis/type/car';
 import Button from '../../components/button/Button';
 import CarStockTable from '../../components/table/CarDetailStockTable';
@@ -18,6 +18,7 @@ function CarDetail() {
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [car, setCar] = useState<TCarResponse>();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -61,6 +62,20 @@ function CarDetail() {
     setCarDeleteModalOpen(true);
   };
 
+  const onCarDeleteButtonConfirmClick = (id: number) => {
+    setCarDeleteModalOpen(true);
+    CarApi.deleteCar(id)
+      .then((res) => {
+        setCarUpdateModalOpen(false);
+        navigate('/cars');
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        setErrorMessage(data.message);
+        setErrorModalOpen(true);
+      });
+  };
+
   return (
     <Wrapper>
       <ErrorModal
@@ -82,7 +97,7 @@ function CarDetail() {
         title="차량 삭제"
         content="해당 차량을 삭제하시겠습니까?"
         modalOpen={carDeleteModalOpen}
-        onConfirm={() => setCarDeleteModalOpen(false)}
+        onConfirm={() => onCarDeleteButtonConfirmClick(id as unknown as number)}
         onCancel={() => setCarDeleteModalOpen(false)}
         buttonText="삭제하기"
         property="delete"

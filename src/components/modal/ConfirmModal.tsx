@@ -31,7 +31,11 @@ function ConfirmModal({
       onOk={onConfirm}
       footer={
         <ButtonWrapper>
-          <ConfirmButton label={buttonText} property={property}></ConfirmButton>
+          <ConfirmButton
+            label={buttonText}
+            property={property}
+            onClick={onConfirm}
+          ></ConfirmButton>
         </ButtonWrapper>
       }
       onCancel={onCancel}

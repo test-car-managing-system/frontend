@@ -53,6 +53,14 @@ const CarApi = {
     return data;
   },
 
+  // 차량 삭제
+  deleteCar: async (id: number): Promise<TResponseType<TCarResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.delete(`/cars/${id}`);
+    return data;
+  },
+
   // 차량 관리 차량 재고 조회
   getCarStocks: async (
     params?: TCarStockRequestParams,

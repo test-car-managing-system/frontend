@@ -51,7 +51,7 @@ function ConfirmModal({
 
   return (
     <Modal
-      style={{ border: '1px solid black', fontWeight: '500' }}
+      style={{ border: '0.5px solid black', fontWeight: '500' }}
       title={<Title>{title}</Title>}
       centered
       open={modalOpen}
@@ -134,14 +134,14 @@ const ButtonWrapper = styled.div`
 
 const Wrapper = styled.div`
   margin-top: 10px;
-  border-top: 1px solid black;
+  border-top: 0.5px solid black;
   padding: 15px 0 15px;
   ${({ theme }) => theme.typo.text.T_16_EB};
   font-weight: 500;
 `;
 
 const Container = styled.div`
-  border: 1px solid black;
+  border: 0.5px solid black;
   padding: 30px 20px 30px 20px;
   ${({ theme }) => theme.typo.text.T_16_EB};
   font-weight: 500;
