@@ -10,11 +10,7 @@ import {
   TCarStockRequest,
   TCarStockResponse,
 } from '../../apis/type/car';
-import mapKoreanToCarType from '../../apis/util/mapToKorCarType';
 import { useEffect, useState } from 'react';
-import parseKorToCarType from '../../apis/util/parseKorToCarType';
-import parseKorToCarStockStatus from '../../apis/util/parseKorToCarStockStatus';
-import { useParams } from 'react-router-dom';
 
 interface ConfirmModalProps {
   title: string;

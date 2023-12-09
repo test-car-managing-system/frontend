@@ -12,13 +12,20 @@ import { AxiosError } from 'axios';
 import { ErrorResponse } from '../../apis/type/commonResponse';
 import ErrorModal from '../../components/modal/ErrorModal';
 import useGetMyInfo from '../../hooks/query/useGetMyInfo';
+import MembersApi from '../../apis/MembersApi';
+import {
+  IMembersRes,
+  Role,
+  TUpdateMemberRequest,
+} from '../../apis/type/member';
+import MemberUpdateModal from '../../components/modal/MemberUpdateModal';
 
-function CarDetail() {
-  const [carDeleteModalOpen, setCarDeleteModalOpen] = useState<boolean>(false);
-  const [carUpdateModalOpen, setCarUpdateModalOpen] = useState<boolean>(false);
+function MemberDetail() {
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [car, setCar] = useState<TCarResponse>();
+  const [member, setMember] = useState<IMembersRes>();
   const navigate = useNavigate();
   const { id } = useParams();
   const { status, data: user } = useGetMyInfo();
@@ -26,38 +33,39 @@ function CarDetail() {
 
   useEffect(() => {
     id &&
-      CarApi.getCarDetail(id as unknown as number).then(
-        (res) => res.result && setCar(res.result),
+      MembersApi.getMemberDetail(id as unknown as number).then(
+        (res) => res.result && setMember(res.result),
       );
   }, []);
 
   const [data, setData] = useState<{ title: string; data?: string }[]>();
   useEffect(() => {
     setData([
-      { title: '차량명', data: car?.name },
-      { title: '등록일자', data: car?.createdAt },
+      { title: '이름', data: member?.name },
       {
-        title: '차종',
-        data: CarType[car?.type as unknown as keyof typeof CarType],
+        title: '권한',
+        data: Role[member?.role as unknown as keyof typeof Role],
       },
-      { title: '배기량', data: car?.displacement.toString() },
+      { title: '이메일', data: member?.email },
+      { title: '가입일자', data: member?.createdAt },
+      { title: '부서', data: member?.department?.name },
     ]);
-  }, [car]);
+  }, [member]);
 
-  const onCarUpdateButtonClick = () => {
+  const onUpdateButtonClick = () => {
     if (!hasRole) {
       setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
       setErrorModalOpen(true);
     } else {
-      setCarUpdateModalOpen(true);
+      setUpdateModalOpen(true);
     }
   };
 
-  const onCarUpdateButtonConfirmClick = (request: TCarRequest) => {
-    CarApi.updateCarDetail(request)
+  const onUpdateButtonConfirmClick = (request: TUpdateMemberRequest) => {
+    MembersApi.updateMemberDetail(request)
       .then((res) => {
-        res.result && setCar(res.result);
-        setCarUpdateModalOpen(false);
+        res.result && setMember(res.result);
+        setUpdateModalOpen(false);
       })
       .catch((error: AxiosError) => {
         const data: ErrorResponse = error.response?.data as ErrorResponse;
@@ -66,20 +74,20 @@ function CarDetail() {
       });
   };
 
-  const onCarDeleteButtonClick = () => {
+  const onDeleteButtonClick = () => {
     if (!hasRole) {
       setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
       setErrorModalOpen(true);
     } else {
-      setCarDeleteModalOpen(true);
+      setDeleteModalOpen(true);
     }
   };
 
-  const onCarDeleteButtonConfirmClick = (id: number) => {
-    CarApi.deleteCar(id)
+  const onDeleteButtonConfirmClick = (id: number) => {
+    MembersApi.deleteMember(id)
       .then((res) => {
-        setCarDeleteModalOpen(false);
-        navigate('/cars');
+        setDeleteModalOpen(false);
+        navigate('/members');
       })
       .catch((error: AxiosError) => {
         const data: ErrorResponse = error.response?.data as ErrorResponse;
@@ -95,47 +103,45 @@ function CarDetail() {
         content={errorMessage}
         onCancel={() => setErrorModalOpen(false)}
       />
-      <CarUpdateModal
-        title="차량 수정"
-        content="해당 차량을 수정하시겠습니까?"
-        modalOpen={carUpdateModalOpen}
-        onConfirm={(data: TCarRequest) => onCarUpdateButtonConfirmClick(data)}
-        onCancel={() => setCarUpdateModalOpen(false)}
+      <MemberUpdateModal
+        title="사용자 정보 수정"
+        modalOpen={updateModalOpen}
+        onConfirm={(data: TUpdateMemberRequest) =>
+          onUpdateButtonConfirmClick(data)
+        }
+        onCancel={() => setUpdateModalOpen(false)}
         buttonText="수정하기"
         property="update"
-        defaultValues={car}
+        defaultValues={member}
       />
       <ConfirmModal
-        title="차량 삭제"
-        content="해당 차량을 삭제하시겠습니까?"
-        modalOpen={carDeleteModalOpen}
-        onConfirm={() => onCarDeleteButtonConfirmClick(id as unknown as number)}
-        onCancel={() => setCarDeleteModalOpen(false)}
+        title="사용자 삭제"
+        content="해당 사용자를 삭제하시겠습니까?"
+        modalOpen={deleteModalOpen}
+        onConfirm={() => onDeleteButtonConfirmClick(id as unknown as number)}
+        onCancel={() => setDeleteModalOpen(false)}
         buttonText="삭제하기"
         property="delete"
       />
-      <Info title="차량 정보" contents={data}></Info>
+      <Info title="사용자 정보" contents={data}></Info>
       <ButtonContainer>
         <Button
           property="update"
           label="수정"
-          onClick={() => onCarUpdateButtonClick()}
+          onClick={() => onUpdateButtonClick()}
         />
         <HorizontalSizedBox />
         <Button
           property="delete"
           label="삭제"
-          onClick={() => onCarDeleteButtonClick()}
+          onClick={() => onDeleteButtonClick()}
         />
       </ButtonContainer>
-      <Container>
-        <CarStockTable title="재고 조회" />
-      </Container>
     </Wrapper>
   );
 }
 
-export default CarDetail;
+export default MemberDetail;
 
 const Wrapper = styled.div``;
 

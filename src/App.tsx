@@ -5,6 +5,7 @@ import useApiError from './hooks/useApiError';
 import { useQueryClient } from 'react-query';
 import Template from './components/layout/Template';
 import Car from './pages/car';
+import Member from './pages/member';
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
     <Template>
       <Routes key={location.pathname} location={location}>
         <Route path="/cars/*" element={<Car />} />
+        <Route path="/members/*" element={<Member />} />
         <Route path="/" element={<DashBoard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

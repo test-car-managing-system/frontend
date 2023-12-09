@@ -8,8 +8,9 @@ interface InfoProps {
 }
 
 function Info({ children, title, contents }: InfoProps) {
-  const groupedContents = [];
+  const groupedContents: React.ReactNode[] = [];
   if (contents) {
+    console.log(contents);
     for (let i = 0; i < contents.length; i += 2) {
       const group = (
         <Row
@@ -32,7 +33,7 @@ function Info({ children, title, contents }: InfoProps) {
           <Col span={5} style={{ textAlign: 'left' }}>
             {contents[i].data}
           </Col>
-          {contents[i + 1] && (
+          {contents[i + 1] ? (
             <>
               <Col
                 span={4}
@@ -49,6 +50,18 @@ function Info({ children, title, contents }: InfoProps) {
               <Col span={5} style={{ textAlign: 'left' }}>
                 {contents[i + 1].data}
               </Col>
+            </>
+          ) : (
+            <>
+              <Col
+                span={4}
+                style={{
+                  fontWeight: '700',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              />{' '}
+              <Col span={5} style={{ textAlign: 'left' }} />
             </>
           )}
         </Row>
