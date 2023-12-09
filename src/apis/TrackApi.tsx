@@ -1,9 +1,24 @@
 import { axiosRequest } from './axios';
 import { TPageResponse, TResponseType } from './type/commonResponse';
-import { TTrackReservationsResponse } from './type/track';
+import {
+  TTrackRequestParams,
+  TTrackReservationsResponse,
+  TTrackResponse,
+} from './type/track';
 
 const TrackApi = {
-  // 로그인 요청
+  getTracks: async (
+    params: TTrackRequestParams,
+  ): Promise<TResponseType<TTrackResponse[]>> => {
+    const { data } = await axiosRequest.get('/tracks', {
+      params: {
+        name: params?.name,
+        location: params?.location,
+      },
+    });
+    return data;
+  },
+  // 시험장 예약 현황
   getMyTrackReservations: async (): Promise<
     TResponseType<TPageResponse<TTrackReservationsResponse[]>>
   > => {

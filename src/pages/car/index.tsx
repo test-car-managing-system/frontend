@@ -4,7 +4,7 @@ import CarDetail from './CarDetail';
 import CarRegister from './CarRegister';
 import CarStocks from './CarStocks';
 
-const Auth = () => {
+const Cars = () => {
   return (
     <Routes>
       <Route path="/" element={<Car />} />
@@ -16,4 +16,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Cars;

@@ -1,3 +1,18 @@
+export interface TTrackResponse {
+  id?: number;
+  name?: string;
+  location?: string;
+  longitude?: string;
+  latitude?: string;
+  description?: string;
+  length?: number;
+}
+
+export interface TTrackRequestParams {
+  name?: string;
+  location?: string;
+}
+
 export interface TTrackReservationsResponse {
   id: number;
   name: string;
