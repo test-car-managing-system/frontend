@@ -81,6 +81,18 @@ const CarApi = {
     return data;
   },
 
+  // 차량 재고 리스트 삭제
+  deleteCarStocks: async (ids: number[]): Promise<TResponseType<number[]>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.delete(`/cars/stocks`, {
+      data: {
+        ids: ids,
+      },
+    });
+    return data;
+  },
+
   // 시험차량 예약 조회
   getMyCarReservations: async (): Promise<
     TResponseType<TPageResponse<TCarReservationsResponse[]>>

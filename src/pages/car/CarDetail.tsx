@@ -76,7 +76,6 @@ function CarDetail() {
   };
 
   const onCarDeleteButtonConfirmClick = (id: number) => {
-    setCarDeleteModalOpen(true);
     CarApi.deleteCar(id)
       .then((res) => {
         setCarUpdateModalOpen(false);

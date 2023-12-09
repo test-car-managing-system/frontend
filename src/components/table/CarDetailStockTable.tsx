@@ -18,6 +18,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CarApi from '../../apis/CarApi';
 import Button from '../button/Button';
 import ConfirmModal from '../modal/ConfirmModal';
+import useGetMyInfo from '../../hooks/query/useGetMyInfo';
+import { ErrorResponse } from '../../apis/type/commonResponse';
+import { AxiosError } from 'axios';
+import ErrorModal from '../modal/ErrorModal';
 
 interface DataType {
   key: React.Key;
@@ -53,6 +57,8 @@ const columns: ColumnsType<DataType> = [
 function CarStockTable({ title }: TableProps) {
   const [updateAvailable, setUpdateAvailable] = useState<boolean>(false);
   const [deleteAvailable, setDeleteAvailable] = useState<boolean>(false);
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [carStockDeleteModalOpen, setCarStockDeleteModalOpen] =
     useState<boolean>(false);
   const [carStockRegisterModalOpen, setCarStockRegisterModalOpen] =
@@ -61,6 +67,9 @@ function CarStockTable({ title }: TableProps) {
     useState<boolean>(false);
   const [carStocks, setCarStocks] = useState<TCarStockResponse[]>();
   const { id } = useParams();
+  const { status, data: user } = useGetMyInfo();
+  const hasRole = user?.result.role == 'ADMIN';
+  console.log(hasRole);
 
   useEffect(() => {
     id &&
@@ -70,6 +79,7 @@ function CarStockTable({ title }: TableProps) {
   }, []);
 
   const [data, setData] = useState<DataType[]>([]);
+  const [ids, setIds] = useState<number[]>([]);
   useEffect(() => {
     const rawData: DataType[] = [];
     carStocks?.forEach((content, index) => {
@@ -87,12 +97,14 @@ function CarStockTable({ title }: TableProps) {
     setData(rawData);
   }, [carStocks]);
 
-  const onCarStockDeleteButtonClick = () => {
-    setCarStockDeleteModalOpen(true);
-  };
-
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    const ids = newSelectedRowKeys.map((key) => {
+      const item = data.find((d) => d.key === key);
+      return item ? item.id : 0;
+    });
+    setIds(ids);
+
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
     if (newSelectedRowKeys && newSelectedRowKeys.length == 1) {
@@ -113,25 +125,64 @@ function CarStockTable({ title }: TableProps) {
     onChange: onSelectChange,
   };
 
-  // 차량 클릭 시 이동 로직
-  const navigate = useNavigate();
-  const handleRowClick = (record: any) => {
-    navigate(`/cars/detail/${record.id}`);
+  // 모달 오픈
+  const onCarStockRegisterButtonClick = () => {
+    if (!hasRole) {
+      setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
+      setErrorModalOpen(true);
+    } else {
+      setCarStockRegisterModalOpen(true);
+    }
   };
-  const onRow = (record: any) => {
-    return {
-      onClick: () => handleRowClick(record),
-    };
+
+  const onCarStockUpdateButtonClick = () => {
+    if (!hasRole) {
+      setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
+      setErrorModalOpen(true);
+    } else {
+      setCarStockUpdateModalOpen(true);
+    }
+  };
+
+  const onCarStockDeleteButtonClick = () => {
+    if (!hasRole) {
+      setErrorMessage('해당 기능에 대한 접근 권한이 없습니다.');
+      setErrorModalOpen(true);
+    } else {
+      setCarStockDeleteModalOpen(true);
+    }
+  };
+
+  const onCarStockDeleteButtonConfirmClick = (ids: number[]) => {
+    CarApi.deleteCarStocks(ids)
+      .then((res) => {
+        id &&
+          CarApi.getCarStocks({ carId: id as unknown as number }).then(
+            (res) => res.result.contents && setCarStocks(res.result.contents),
+          );
+        setCarStockDeleteModalOpen(false);
+        setSelectedRowKeys([]);
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        setErrorMessage(data.message);
+        setErrorModalOpen(true);
+      });
   };
 
   // 컴포넌트
   return (
     <>
+      <ErrorModal
+        modalOpen={errorModalOpen}
+        content={errorMessage}
+        onCancel={() => setErrorModalOpen(false)}
+      />
       <ConfirmModal
         title="재고 삭제"
         content="해당 재고를 삭제하시겠습니까"
         modalOpen={carStockDeleteModalOpen}
-        onConfirm={() => setCarStockDeleteModalOpen(false)}
+        onConfirm={() => onCarStockDeleteButtonConfirmClick(ids)}
         onCancel={() => setCarStockDeleteModalOpen(false)}
         buttonText="삭제하기"
         property="delete"
@@ -142,15 +193,27 @@ function CarStockTable({ title }: TableProps) {
         columns={columns}
         dataSource={data}
         pagination={false}
-        onRow={onRow}
         style={{
           width: '100%',
         }}
       />
       <ButtonContainer>
-        <Button property="update" label="등록" />
+        <Button
+          property="update"
+          label="등록"
+          onClick={() => {
+            onCarStockRegisterButtonClick();
+          }}
+        />
         <HorizontalSizedBox />
-        <Button property="update" label="수정" state={updateAvailable} />
+        <Button
+          property="update"
+          label="수정"
+          state={updateAvailable}
+          onClick={() => {
+            updateAvailable && onCarStockUpdateButtonClick();
+          }}
+        />
         <HorizontalSizedBox />
         <Button
           property="delete"
