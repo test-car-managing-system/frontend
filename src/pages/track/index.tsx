@@ -1,11 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Track from './Track';
+import TrackSelection from './TrackSelection';
+import TrackSelectionDetail from './TrackSelectionDetail';
 
 const Cars = () => {
   return (
     <Routes>
-      <Route path="/" element={<Track />} />
-      <Route path="/reservations/new" element={<Track />} />
+      <Route path="/" element={<TrackSelection />} />
+      <Route
+        path="/reservations/new/detail/:id"
+        element={<TrackSelectionDetail />}
+      />
+      <Route path="/reservations/new" element={<TrackSelection />} />
       <Route path="/*" element={<Navigate to="/404" />} />
     </Routes>
   );

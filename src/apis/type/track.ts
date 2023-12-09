@@ -8,6 +8,17 @@ export interface TTrackResponse {
   length?: number;
 }
 
+export interface TTrackReservationRequest {
+  id?: number;
+  date?: string;
+  reservationSlots?: TTrackReservationSlot[];
+}
+
+export interface TTrackReservationSlot {
+  startedAt?: string;
+  expiredAt?: string;
+}
+
 export interface TTrackRequestParams {
   name?: string;
   location?: string;

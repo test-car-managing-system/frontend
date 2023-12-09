@@ -65,7 +65,7 @@ function TrackTable({ title, params }: TableProps) {
   // 멤버 클릭 시 이동 로직
   const navigate = useNavigate();
   const handleRowClick = (record: any) => {
-    navigate(`/tracks/reservations/detail/${record.id}`);
+    navigate(`/tracks/reservations/new/detail/${record.id}`);
   };
   const onRow = (record: any) => {
     return {
