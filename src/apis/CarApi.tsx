@@ -8,7 +8,7 @@ import { TPageRequest } from './type/commonRequest';
 import { TPageResponse, TResponseType } from './type/commonResponse';
 
 const CarApi = {
-  // 시험차량 예약 조회
+  // 차량 관리 차량 조회
   getCars: async (
     params?: TCarRequestParams,
     page?: TPageRequest,
@@ -27,6 +27,15 @@ const CarApi = {
     });
     return data;
   },
+
+  // 차량 관리 차량 조회
+  getCarDetail: async (id: number): Promise<TResponseType<TCarResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get(`/cars/${id}`);
+    return data;
+  },
+
   // 시험차량 예약 조회
   getMyCarReservations: async (): Promise<
     TResponseType<TPageResponse<TCarReservationsResponse[]>>

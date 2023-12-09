@@ -1,7 +1,5 @@
 import styled from 'styled-components';
-import CarTable from '../../components/table/CarTable';
 import CarSearchBoard from '../../components/search/CarSearchBoard';
-import { SetStateAction, useState } from 'react';
 
 function Car() {
   return (
