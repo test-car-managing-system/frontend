@@ -68,27 +68,31 @@ function MemberTable({
   const [members, setMembers] = useState<DataType[]>([]);
 
   // 쿼리
-  MembersApi.getMembers(params).then((res) => {
-    const contents = res.result.contents;
-    const size = maxResult ? maxResult : contents.length;
-    const start = res.result.page * pageParams.size;
 
-    const data = [];
-    for (let i = 0; i < size; i++) {
-      data.push({
-        key: start + i + 1,
-        id: contents[i].id,
-        name: contents[i].name,
-        department: contents[i].department?.name,
-        role: Role[contents[i].role as unknown as keyof typeof Role],
-        createdAt: contents[i].createdAt,
-      });
-    }
+  // 페이지네이션 쿼리
+  useEffect(() => {
+    MembersApi.getMembers(params, pageParams).then((res) => {
+      const contents = res.result.contents;
+      const size = maxResult ? maxResult : contents.length;
+      const start = res.result.page * pageParams.size;
 
-    setTotalElements(res.result.totalElements || 0);
-    setTotalPages(res.result.totalPages || 1);
-    setMembers(data);
-  });
+      const data = [];
+      for (let i = 0; i < size; i++) {
+        data.push({
+          key: start + i + 1,
+          id: contents[i].id,
+          name: contents[i].name,
+          department: contents[i].department?.name,
+          role: Role[contents[i].role as unknown as keyof typeof Role],
+          createdAt: contents[i].createdAt,
+        });
+      }
+
+      setTotalElements(res.result.totalElements || 0);
+      setTotalPages(res.result.totalPages || 1);
+      setMembers(data);
+    });
+  }, [params, pageParams]);
 
   const pageSelect = <PageSizeSelect onchange={setPageParams}></PageSizeSelect>;
   const pagination = (
@@ -101,7 +105,7 @@ function MemberTable({
     </PaginationContainer>
   );
 
-  // 차량 클릭 시 이동 로직
+  // 멤버 클릭 시 이동 로직
   const navigate = useNavigate();
   const handleRowClick = (record: any) => {
     navigate(`/members/detail/${record.id}`);

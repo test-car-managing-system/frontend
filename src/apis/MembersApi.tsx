@@ -1,4 +1,5 @@
 import { axiosRequest } from './axios';
+import { TPageRequest } from './type/commonRequest';
 import { TPageResponse, TResponseType } from './type/commonResponse';
 import {
   IMembersRes,
@@ -17,12 +18,15 @@ const MembersApi = {
   // 사용자 리스트 가져오기
   getMembers: async (
     params: TMemberRequestParams,
+    page: TPageRequest,
   ): Promise<TResponseType<TPageResponse<IMembersRes[]>>> => {
     const { data } = await axiosRequest.get('/members', {
       params: {
         name: params?.name,
         department: params?.department,
         role: params?.role,
+        page: page.page,
+        size: page.size,
       },
     });
     return data;
