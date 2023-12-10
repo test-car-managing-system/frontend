@@ -12,6 +12,7 @@ export interface TTestCarResponse {
   type: string;
   stock: number;
   status: string;
+  displacement: number;
   createdAt: string;
 }
 
