@@ -2,59 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { DatePicker, Form, Input, Select } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
-import { Role, TMemberRequestParams } from '../../apis/type/member';
-import DepartmentApi from '../../apis/DeparmentApi';
-import MemberTable from '../table/MemberTable';
+import {
+  TTrackReservationRequestParams,
+  TrackReservationStatus,
+} from '../../apis/type/track';
+import TrackMyReservaitonTable from '../table/TrackMyReservaitonTable';
 
-function MemberSeachBoard() {
-  const [params, setParams] = useState<TMemberRequestParams>();
+function TrackReservationSearchBoard() {
+  const [params, setParams] = useState<TTrackReservationRequestParams>();
   const [form] = Form.useForm();
   const handleSearchButtonClick = () => {
     const formValues = form.getFieldsValue();
-    const name = formValues['carName'];
-    const department = departmentSelected;
-    const role = roleSelected;
-    const params: TMemberRequestParams = {
+    const name = formValues['name'];
+    const rawDate = formValues['date'];
+    const createdAt = rawDate ? rawDate.format('YYYY-MM-DD') : undefined;
+    const status = statusSelected;
+    const params: TTrackReservationRequestParams = {
       name,
-      department,
-      role,
+      createdAt,
+      status,
     };
     setParams(params);
   };
 
-  const [departmentSelected, setDepartmentSelected] = useState<string>('');
-  const [roleSelected, setRoleSelected] = useState<string>('');
-  const [departments, setDepartments] = useState<
-    { id: number; name: string }[]
-  >([]);
-
-  useEffect(() => {
-    DepartmentApi.getDepartments().then((res) => {
-      const rawData: { id: number; name: string }[] = [];
-      res.result.forEach((department) => {
-        rawData.push({
-          id: department.id,
-          name: department.name,
-        });
-      });
-      setDepartments(rawData);
-    });
-  }, []);
-
+  const [statusSelected, setStatusSelected] = useState<string>('');
   const handleFlushButtonClick = () => {
     form.resetFields();
     setParams(undefined);
-    setDepartmentSelected('');
-    setRoleSelected('');
+    setStatusSelected('');
   };
 
-  const departmentSelect = departments.map((department) => (
-    <Select.Option value={department.name}>{department.name}</Select.Option>
-  ));
-
-  const roles = [];
-  for (const [key, value] of Object.entries(Role)) {
-    roles.push(<Select.Option value={key}>{value}</Select.Option>);
+  const trackReservationStatus = [];
+  for (const [key, value] of Object.entries(TrackReservationStatus)) {
+    trackReservationStatus.push(
+      <Select.Option value={key}>{value}</Select.Option>,
+    );
   }
 
   return (
@@ -68,27 +50,20 @@ function MemberSeachBoard() {
           form={form}
           style={{ justifyContent: 'center', width: '80%', fontWeight: '700' }}
         >
-          <Form.Item name="name" label="이름" wrapperCol={{ offset: 2 }}>
+          <Form.Item name="name" label="시험장명" wrapperCol={{ offset: 2 }}>
             <Input />
           </Form.Item>
-          <Form.Item name="deparment" label="부서" wrapperCol={{ offset: 2 }}>
-            <Select
-              style={{ width: '150px' }}
-              onChange={(value, option) => {
-                setDepartmentSelected(value);
-              }}
-            >
-              {departmentSelect}
-            </Select>
+          <Form.Item name="date" label="예약일자" wrapperCol={{ offset: 2 }}>
+            <DatePicker />
           </Form.Item>
-          <Form.Item name="role" label="권한" wrapperCol={{ offset: 2 }}>
+          <Form.Item name="status" label="예약상태" wrapperCol={{ offset: 2 }}>
             <Select
               style={{ width: '150px' }}
               onChange={(value, option) => {
-                setRoleSelected(value);
+                setStatusSelected(value);
               }}
             >
-              {roles}
+              {trackReservationStatus}
             </Select>
           </Form.Item>
           <Divider />
@@ -104,12 +79,16 @@ function MemberSeachBoard() {
         </Form>
       </Container>
       <VerticalSizedBox />
-      <MemberTable title="검색 결과" params={params} usePagenation={true} />
+      <TrackMyReservaitonTable
+        title="검색 결과"
+        params={params}
+        usePagenation={true}
+      />
     </>
   );
 }
 
-export default MemberSeachBoard;
+export default TrackReservationSearchBoard;
 
 const Container = styled.div`
   width: 100%;

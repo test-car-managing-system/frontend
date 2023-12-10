@@ -45,17 +45,20 @@ function TrackReservaitonTable({ title, useSelection }: TableProps) {
   const data: DataType[] = [];
   if (trackReservationsStatus === 'success' && trackReservations) {
     const contents = trackReservations.result.contents;
-    const size = Math.min(contents.length, 5);
-    for (let i = 0; i < size; i++) {
-      data.push({
-        key: i + 1,
-        trackName: contents[i].name,
-        createdAt: contents[i].createdAt,
-        reservationStatus:
-          TrackReservationStatus[
-            contents[i].status as unknown as keyof typeof TrackReservationStatus
-          ],
-      });
+    if (contents) {
+      const size = Math.min(contents.length, 5);
+      for (let i = 0; i < size; i++) {
+        data.push({
+          key: i + 1,
+          trackName: contents[i].name,
+          createdAt: contents[i].createdAt,
+          reservationStatus:
+            TrackReservationStatus[
+              contents[i]
+                .status as unknown as keyof typeof TrackReservationStatus
+            ],
+        });
+      }
     }
   }
 

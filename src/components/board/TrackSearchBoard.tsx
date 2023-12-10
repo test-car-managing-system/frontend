@@ -1,29 +1,20 @@
-import React, { useState } from 'react';
-import { DatePicker, Form, Input, Select } from 'antd';
+import { useState } from 'react';
+import { DatePicker, Form, Input } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
-import {
-  CarStockStatus,
-  TCarRequestParams,
-  TCarStockRequestParams,
-} from '../../apis/type/car';
-import CarStockTable from '../table/CarStockTable';
+import { TTrackRequestParams } from '../../apis/type/track';
+import TrackTable from '../table/TrackTable';
 
-const { RangePicker } = DatePicker;
-
-function CarStocksSearchBoard() {
-  const [params, setParams] = useState<TCarRequestParams | undefined>();
-  const [selectOption, setSelectOption] = useState<string>();
+function TrackSearchBoard() {
+  const [params, setParams] = useState<TTrackRequestParams>();
   const [form] = Form.useForm();
   const handleSearchButtonClick = () => {
     const formValues = form.getFieldsValue();
     const name = formValues['name'];
-    const stockNumber = formValues['stockNumber'];
-    const status = selectOption;
-    const params: TCarStockRequestParams = {
+    const location = formValues['location'];
+    const params: TTrackRequestParams = {
       name,
-      stockNumber,
-      status,
+      location,
     };
     setParams(params);
   };
@@ -31,13 +22,7 @@ function CarStocksSearchBoard() {
   const handleFlushButtonClick = () => {
     form.resetFields();
     setParams(undefined);
-    setSelectOption(undefined);
   };
-
-  const options = [];
-  for (const [key, value] of Object.entries(CarStockStatus)) {
-    options.push(<Select.Option value={key}>{value}</Select.Option>);
-  }
 
   return (
     <>
@@ -50,25 +35,11 @@ function CarStocksSearchBoard() {
           form={form}
           style={{ justifyContent: 'center', width: '80%', fontWeight: '700' }}
         >
-          <Form.Item name="name" label="차량명" wrapperCol={{ offset: 2 }}>
+          <Form.Item name="name" label="시험장명" wrapperCol={{ offset: 2 }}>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="stockNumber"
-            label="재고번호"
-            wrapperCol={{ offset: 2 }}
-          >
+          <Form.Item name="location" label="위치" wrapperCol={{ offset: 2 }}>
             <Input />
-          </Form.Item>
-          <Form.Item name="status" label="재고상태" wrapperCol={{ offset: 2 }}>
-            <Select
-              style={{ width: '150px' }}
-              onChange={(value, option) => {
-                setSelectOption(value);
-              }}
-            >
-              {options}
-            </Select>
           </Form.Item>
           <Divider />
           <ButtonContainer>
@@ -83,12 +54,12 @@ function CarStocksSearchBoard() {
         </Form>
       </Container>
       <VerticalSizedBox />
-      <CarStockTable title="검색 결과" params={params} usePagenation={false} />
+      <TrackTable title="검색 결과" params={params} />
     </>
   );
 }
 
-export default CarStocksSearchBoard;
+export default TrackSearchBoard;
 
 const Container = styled.div`
   width: 100%;

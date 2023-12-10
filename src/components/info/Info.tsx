@@ -10,7 +10,6 @@ interface InfoProps {
 function Info({ children, title, contents }: InfoProps) {
   const groupedContents: React.ReactNode[] = [];
   if (contents) {
-    console.log(contents);
     for (let i = 0; i < contents.length; i += 2) {
       const group = (
         <Row
