@@ -131,7 +131,7 @@ function GasStationHistoryTable({
   // 차량 클릭 시 이동 로직
   const navigate = useNavigate();
   const handleRowClick = (record: any) => {
-    navigate(`/gas/detail/${record.id}`);
+    navigate(`/gas/history/detail/${record.id}`);
   };
   const onRow = (record: any) => {
     return {

@@ -27,6 +27,14 @@ const GasStationHistoryApi = {
     });
     return data;
   },
+
+  // 주유 이력 상세
+  getGasStationHistory: async (
+    id?: number,
+  ): Promise<TResponseType<TGasStationHistoryResponse>> => {
+    const { data } = await axiosRequest.get(`/gas-stations/history/${id}`);
+    return data;
+  },
 };
 
 export default GasStationHistoryApi;
