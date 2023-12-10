@@ -5,7 +5,7 @@ import ConfirmButton from '../button/ConfirmButton';
 
 interface ConfirmModalProps {
   title: string;
-  content: string;
+  content: any;
   modalOpen: boolean;
   onConfirm?: any;
   onCancel?: () => any;

@@ -2,11 +2,13 @@ import { axiosRequest } from './axios';
 import {
   TCarRequest,
   TCarRequestParams,
+  TCarReservationsRequestParams,
   TCarReservationsResponse,
   TCarResponse,
   TCarStockRequest,
   TCarStockRequestParams,
   TCarStockResponse,
+  TTestCarResponse,
 } from './type/car';
 import { TPageRequest } from './type/commonRequest';
 import { TPageResponse, TResponseType } from './type/commonResponse';
@@ -29,6 +31,34 @@ const CarApi = {
         size: page?.size,
       },
     });
+    return data;
+  },
+
+  // 시험 차량 조회
+  getTestCars: async (
+    params?: TCarRequestParams,
+    page?: TPageRequest,
+  ): Promise<TResponseType<TPageResponse<TTestCarResponse[]>>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/test-cars', {
+      params: {
+        name: params?.name,
+        type: params?.type,
+        startDate: params?.startDate,
+        endDate: params?.endDate,
+        page: page?.page,
+        size: page?.size,
+      },
+    });
+    return data;
+  },
+
+  // 시험 차량 상세 조회
+  getTestCar: async (id?: number): Promise<TResponseType<TTestCarResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get(`/test-cars/${id}`);
     return data;
   },
 
@@ -135,13 +165,57 @@ const CarApi = {
     return data;
   },
 
-  // 시험차량 예약 조회
+  // 대시보드 시험차량 예약 조회
   getMyCarReservations: async (): Promise<
     TResponseType<TPageResponse<TCarReservationsResponse[]>>
   > => {
     const token = localStorage.getItem('accessToken');
     axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const { data } = await axiosRequest.get('/cars/reservations');
+    return data;
+  },
+
+  // 시험차량 예약 조회 필터링
+  getCarReservations: async (
+    params: TCarReservationsRequestParams,
+    page: TPageRequest,
+  ): Promise<TResponseType<TPageResponse<TCarReservationsResponse[]>>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/cars/reservations', {
+      params: {
+        name: params?.name,
+        status: params?.status,
+        startDate: params?.startDate,
+        endDate: params?.endDate,
+        page: page?.page,
+        size: page?.size,
+      },
+    });
+    return data;
+  },
+
+  // 시험차량 예약
+  postCarReservation: async (
+    id: number,
+  ): Promise<TResponseType<TCarReservationsResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.post(`/cars/reserve`, {
+      carStockId: id,
+    });
+    return data;
+  },
+
+  // 시험차량 반납
+  updateReturnCarReservation: async (
+    ids: number[],
+  ): Promise<TResponseType<TCarReservationsResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.patch(`/cars/return`, {
+      carReservationIds: ids,
+    });
     return data;
   },
 };

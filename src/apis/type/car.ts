@@ -6,6 +6,16 @@ export interface TCarResponse {
   createdAt: string;
 }
 
+export interface TTestCarResponse {
+  id: number;
+  name: string;
+  type: string;
+  stock: number;
+  status: string;
+  displacement: number;
+  createdAt: string;
+}
+
 export interface TCarRequestParams {
   name?: string;
   type?: CarType;
@@ -56,6 +66,13 @@ export enum CarStockStatus {
   INSPECTION = '검수중',
   RESERVED = '대여중',
   UNAVAILABLE = '폐기',
+}
+
+export interface TCarReservationsRequestParams {
+  name?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface TCarReservationsResponse {

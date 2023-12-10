@@ -46,8 +46,8 @@ function LayoutMenu({ children, variant }: TemplateProps) {
   const items: MenuItem[] = [
     getItem('대시보드', '/', <PieChartOutlined />),
     getItem('시험차량 관리', 'cars/reservations', <CarOutlined />, [
-      getItem('대여', '/car/reservations/rent'),
-      getItem('대여 이력', '/cars/reservations/history'),
+      getItem('대여', '/cars/reservations/new'),
+      getItem('대여 이력', '/cars/reservations'),
     ]),
     getItem('차량 관리', 'cars', <ToolOutlined />, [
       getItem('차량 관리', '/cars'),
