@@ -24,6 +24,12 @@ export interface TTrackRequestParams {
   location?: string;
 }
 
+export interface TTrackReservationRequestParams {
+  name?: string;
+  createdAt?: string;
+  status?: string;
+}
+
 export interface TTrackReservationSlotRequestParams {
   trackId?: number;
   date?: string;
