@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LongButton from '../../components/button/LongButton';
-import Template from '../../components/layout/Template';
-import LayoutMenu from '../../components/layout/LayoutTemplate';
 
 function NotFound() {
   const navigate = useNavigate();
@@ -15,7 +13,7 @@ function NotFound() {
       <LongButton
         property="update"
         label="이전 페이지로 가기"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(-2)}
       ></LongButton>
     </Wrapper>
   );

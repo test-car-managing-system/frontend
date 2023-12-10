@@ -8,6 +8,14 @@ export interface TTrackResponse {
   length?: number;
 }
 
+export interface TTrackRequest {
+  id?: number;
+  name?: string;
+  location?: string;
+  description?: string;
+  length?: number;
+}
+
 export interface TTrackReservationRequest {
   id?: number;
   date?: string;

@@ -1,6 +1,7 @@
 import { axiosRequest } from './axios';
 import { TPageResponse, TResponseType } from './type/commonResponse';
 import {
+  TTrackRequest,
   TTrackRequestParams,
   TTrackReservationDetailResponse,
   TTrackReservationRequest,
@@ -50,6 +51,44 @@ const TrackApi = {
         name: params?.name,
         createdAt: params?.createdAt,
         status: params?.status,
+      },
+    });
+    return data;
+  },
+
+  // 시험장 등록
+  postTrack: async (
+    request: TTrackRequest,
+  ): Promise<TResponseType<TTrackResponse>> => {
+    const { data } = await axiosRequest.post(`/tracks/register`, {
+      name: request.name,
+      location: request.location,
+      description: request.description,
+      length: request.length,
+    });
+    return data;
+  },
+
+  // 시험장 수정
+  updateTrack: async (
+    request: TTrackRequest,
+  ): Promise<TResponseType<TTrackResponse>> => {
+    const { data } = await axiosRequest.patch(`/tracks/${request.id}`, {
+      name: request.name,
+      location: request.location,
+      description: request.description,
+      length: request.length,
+    });
+    return data;
+  },
+
+  // 시험장 리스트 삭제
+  deleteTracks: async (ids: number[]): Promise<TResponseType<number[]>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.delete(`/tracks`, {
+      data: {
+        ids: ids,
       },
     });
     return data;

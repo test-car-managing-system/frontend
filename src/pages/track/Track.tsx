@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import CarSearchBoard from '../../components/board/CarSearchBoard';
-import TrackTable from '../../components/table/TrackSelectionTable';
+import TrackSearchBoard from '../../components/board/TrackSearchBoard';
 
 // 시험장 관리
 function Track() {
   return (
     <Wrapper>
-      <TrackTable title={'주행시험장 선택'} />
+      <TrackSearchBoard />
     </Wrapper>
   );
 }

@@ -5,7 +5,7 @@ import TrackReservation from './TrackReservations';
 import TrackReservationDetail from './TrackReservationDetail';
 import Track from './Track';
 
-const Cars = () => {
+const Tracks = () => {
   return (
     <Routes>
       <Route path="/" element={<Track />} />
@@ -21,4 +21,4 @@ const Cars = () => {
   );
 };
 
-export default Cars;
+export default Tracks;
