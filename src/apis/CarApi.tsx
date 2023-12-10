@@ -2,6 +2,7 @@ import { axiosRequest } from './axios';
 import {
   TCarRequest,
   TCarRequestParams,
+  TCarReservationsRequestParams,
   TCarReservationsResponse,
   TCarResponse,
   TCarStockRequest,
@@ -164,13 +165,33 @@ const CarApi = {
     return data;
   },
 
-  // 시험차량 예약 조회
+  // 대시보드 시험차량 예약 조회
   getMyCarReservations: async (): Promise<
     TResponseType<TPageResponse<TCarReservationsResponse[]>>
   > => {
     const token = localStorage.getItem('accessToken');
     axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const { data } = await axiosRequest.get('/cars/reservations');
+    return data;
+  },
+
+  // 시험차량 예약 조회 필터링
+  getCarReservations: async (
+    params: TCarReservationsRequestParams,
+    page: TPageRequest,
+  ): Promise<TResponseType<TPageResponse<TCarReservationsResponse[]>>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/cars/reservations', {
+      params: {
+        name: params?.name,
+        status: params?.status,
+        startDate: params?.startDate,
+        endDate: params?.endDate,
+        page: page?.page,
+        size: page?.size,
+      },
+    });
     return data;
   },
 
@@ -182,6 +203,18 @@ const CarApi = {
     axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const { data } = await axiosRequest.post(`/cars/reserve`, {
       carStockId: id,
+    });
+    return data;
+  },
+
+  // 시험차량 반납
+  updateReturnCarReservation: async (
+    ids: number[],
+  ): Promise<TResponseType<TCarReservationsResponse>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.patch(`/cars/return`, {
+      carReservationIds: ids,
     });
     return data;
   },

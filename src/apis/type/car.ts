@@ -68,6 +68,13 @@ export enum CarStockStatus {
   UNAVAILABLE = '폐기',
 }
 
+export interface TCarReservationsRequestParams {
+  name?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
 export interface TCarReservationsResponse {
   id: number;
   name: string;
