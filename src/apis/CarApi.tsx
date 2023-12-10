@@ -7,6 +7,7 @@ import {
   TCarStockRequest,
   TCarStockRequestParams,
   TCarStockResponse,
+  TTestCarResponse,
 } from './type/car';
 import { TPageRequest } from './type/commonRequest';
 import { TPageResponse, TResponseType } from './type/commonResponse';
@@ -20,6 +21,26 @@ const CarApi = {
     const token = localStorage.getItem('accessToken');
     axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const { data } = await axiosRequest.get('/cars', {
+      params: {
+        name: params?.name,
+        type: params?.type,
+        startDate: params?.startDate,
+        endDate: params?.endDate,
+        page: page?.page,
+        size: page?.size,
+      },
+    });
+    return data;
+  },
+
+  // 시험 차량 조회
+  getTestCars: async (
+    params?: TCarRequestParams,
+    page?: TPageRequest,
+  ): Promise<TResponseType<TPageResponse<TTestCarResponse[]>>> => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/cars/test', {
       params: {
         name: params?.name,
         type: params?.type,

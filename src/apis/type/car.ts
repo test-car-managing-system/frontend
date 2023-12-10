@@ -6,6 +6,15 @@ export interface TCarResponse {
   createdAt: string;
 }
 
+export interface TTestCarResponse {
+  id: number;
+  name: string;
+  type: string;
+  stock: number;
+  status: string;
+  createdAt: string;
+}
+
 export interface TCarRequestParams {
   name?: string;
   type?: CarType;
