@@ -60,7 +60,7 @@ function LayoutMenu({ children, variant }: TemplateProps) {
       getItem('시험 수행 이력', '/tracks/tests'),
       getItem('시험장 관리', '/tracks'),
     ]),
-    getItem('주유 관리', '/gas', <ThunderboltOutlined />),
+    getItem('주유 관리', '/gas/history', <ThunderboltOutlined />),
     getItem('사용자 관리', 'members', <TeamOutlined />, [
       getItem('사용자 조회', '/members'),
       getItem('계정 생성', '/members/register'),
