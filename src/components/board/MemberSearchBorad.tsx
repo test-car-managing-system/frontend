@@ -44,6 +44,8 @@ function MemberSeachBoard() {
   const handleFlushButtonClick = () => {
     form.resetFields();
     setParams(undefined);
+    setDepartmentSelected('');
+    setRoleSelected('');
   };
 
   const departmentSelect = departments.map((department) => (

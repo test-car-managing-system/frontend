@@ -14,7 +14,6 @@ function TrackReservationSearchBoard() {
   const handleSearchButtonClick = () => {
     const formValues = form.getFieldsValue();
     const name = formValues['name'];
-    const location = formValues['location'];
     const rawDate = formValues['date'];
     const createdAt = rawDate ? rawDate.format('YYYY-MM-DD') : undefined;
     const status = statusSelected;
@@ -30,6 +29,7 @@ function TrackReservationSearchBoard() {
   const handleFlushButtonClick = () => {
     form.resetFields();
     setParams(undefined);
+    setStatusSelected('');
   };
 
   const trackReservationStatus = [];

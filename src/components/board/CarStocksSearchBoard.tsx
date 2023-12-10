@@ -31,6 +31,7 @@ function CarStocksSearchBoard() {
   const handleFlushButtonClick = () => {
     form.resetFields();
     setParams(undefined);
+    setSelectOption(undefined);
   };
 
   const options = [];
@@ -62,7 +63,6 @@ function CarStocksSearchBoard() {
           <Form.Item name="status" label="재고상태" wrapperCol={{ offset: 2 }}>
             <Select
               style={{ width: '150px' }}
-              defaultValue={'AVAILABLE'}
               onChange={(value, option) => {
                 setSelectOption(value);
               }}
