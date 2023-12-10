@@ -5,8 +5,11 @@ import styled from 'styled-components';
 import Button from '../button/Button';
 import mapKoreanToCarType from '../../apis/util/mapToKorCarType';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
-import { TTrackReservationRequest } from '../../apis/type/track';
-import { useParams } from 'react-router-dom';
+import {
+  TTrackReservationRequest,
+  TTrackReservationSlot,
+} from '../../apis/type/track';
+import { useNavigate, useParams } from 'react-router-dom';
 import TrackApi from '../../apis/TrackApi';
 import { AxiosError } from 'axios';
 import { ErrorResponse } from '../../apis/type/commonResponse';
@@ -38,25 +41,49 @@ function TrackReservationDateBoard() {
   const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [unavailableSlots, setUnavailableSlots] = useState<
+    TTrackReservationSlot[]
+  >([]);
   const { id } = useParams();
-  const handleSearchButtonClick = () => {
-    const formValues = form.getFieldsValue();
-    const name = formValues['carName'];
-    const type = mapKoreanToCarType(formValues['carType']);
-    const date = formValues['date'];
-  };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTotay(dayjs().format('YYYY-MM-DD'));
+  }, []);
 
   const [groupedOptions, setGroupedOptions] = useState<React.ReactNode[]>([]);
   useEffect(() => {
+    if (today && today != '0') {
+      TrackApi.getTrackReservationSlots({
+        trackId: id as unknown as number,
+        date: today,
+      }).then((res) => {
+        setUnavailableSlots(res.result.reservationTime);
+      });
+    } else {
+      setUnavailableSlots([]);
+    }
+    setCheckedTime([]);
+  }, [today]);
+
+  useEffect(() => {
+    console.log(unavailableSlots);
+
     const rows = [];
     const now = dayjs();
     for (let i = 0; i < options.length; i += 3) {
       const group = options.slice(i, i + 3);
 
       const cols = group.map((option, index) => {
-        const [startTime] = option.value.split(' ~ ');
+        const [startTime, endTime] = option.value.split(' ~ ');
         const dateTime = today && dayjs(`${today} ${startTime}`);
-        const isDisabled = dateTime ? dateTime.isBefore(now) : false;
+        let isDisabled = dateTime ? dateTime.isBefore(now) : false;
+
+        unavailableSlots.forEach(({ startedAt, expiredAt }) => {
+          if (startedAt?.includes(startTime) || expiredAt?.includes(endTime)) {
+            isDisabled = true;
+          }
+        });
 
         return (
           <Col key={index} style={{ fontWeight: '500' }} span={6}>
@@ -77,7 +104,7 @@ function TrackReservationDateBoard() {
     }
     setGroupedOptions(rows);
     setCheckedTime([]);
-  }, [today]);
+  }, [unavailableSlots]);
 
   useEffect(() => {
     const slots: { startedAt: string; expiredAt: string }[] = [];
@@ -109,6 +136,8 @@ function TrackReservationDateBoard() {
           setErrorModalOpen(true);
         });
     }
+    setCheckedTime([]);
+    setTotay(today);
   };
 
   const handleDateChange = (value: any) => {
@@ -134,7 +163,10 @@ function TrackReservationDateBoard() {
         <AlertModal
           modalOpen={alertModalOpen}
           content={'시험장 예약을 성공했습니다'}
-          onCancel={() => setAlertModalOpen(false)}
+          onCancel={() => {
+            setAlertModalOpen(false);
+            window.location.reload();
+          }}
           title={'시험장 예약 알림'}
         />
         <ErrorModal

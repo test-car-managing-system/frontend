@@ -3,7 +3,9 @@ import { TPageResponse, TResponseType } from './type/commonResponse';
 import {
   TTrackRequestParams,
   TTrackReservationRequest,
+  TTrackReservationSlotRequestParams,
   TTrackReservationsResponse,
+  TTrackReservationsSlotResponse,
   TTrackResponse,
 } from './type/track';
 
@@ -29,11 +31,22 @@ const TrackApi = {
     return data;
   },
 
-  // 시험장 예약 현황
+  // 나의 시험장 예약 현황
   getMyTrackReservations: async (): Promise<
     TResponseType<TPageResponse<TTrackReservationsResponse[]>>
   > => {
     const { data } = await axiosRequest.get('/tracks/reservations');
+    return data;
+  },
+
+  // 시험장 예약 현황 슬롯
+  getTrackReservationSlots: async (
+    params: TTrackReservationSlotRequestParams,
+  ): Promise<TResponseType<TTrackReservationsSlotResponse>> => {
+    const { data } = await axiosRequest.get(
+      `/tracks/${params.trackId}/reservations`,
+      { params: { date: params.date } },
+    );
     return data;
   },
 

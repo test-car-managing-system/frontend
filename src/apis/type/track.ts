@@ -24,11 +24,21 @@ export interface TTrackRequestParams {
   location?: string;
 }
 
+export interface TTrackReservationSlotRequestParams {
+  trackId?: number;
+  date?: string;
+}
+
 export interface TTrackReservationsResponse {
   id: number;
   name: string;
   createdAt: string;
   status: TrackReservationStatus;
+}
+
+export interface TTrackReservationsSlotResponse {
+  date?: string;
+  reservationTime: TTrackReservationSlot[];
 }
 
 export enum TrackReservationStatus {
