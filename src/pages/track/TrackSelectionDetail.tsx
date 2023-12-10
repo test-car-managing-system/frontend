@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import TrackTable from '../../components/table/TrackTable';
+import TrackTable from '../../components/table/TrackSelectionTable';
 import { TTrackResponse } from '../../apis/type/track';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';

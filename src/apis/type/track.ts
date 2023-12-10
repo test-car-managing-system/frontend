@@ -42,6 +42,17 @@ export interface TTrackReservationsResponse {
   status: TrackReservationStatus;
 }
 
+export interface TTrackReservationDetailResponse {
+  id: number;
+  memberName: string;
+  name: string;
+  location: string;
+  length: number;
+  description: string;
+  status: string;
+  reservationTime: TTrackReservationSlot[];
+}
+
 export interface TTrackReservationsSlotResponse {
   date?: string;
   reservationTime: TTrackReservationSlot[];

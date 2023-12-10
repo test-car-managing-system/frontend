@@ -38,7 +38,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-function TrackTable({ title, params }: TableProps) {
+function TrackSelectionTable({ title, params }: TableProps) {
   const [tracks, setTracks] = useState<DataType[]>([]);
 
   // 쿼리
@@ -90,7 +90,7 @@ function TrackTable({ title, params }: TableProps) {
   );
 }
 
-export default TrackTable;
+export default TrackSelectionTable;
 
 const SelectContainer = styled.div`
   width: 100%;

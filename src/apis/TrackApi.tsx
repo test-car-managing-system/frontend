@@ -2,6 +2,7 @@ import { axiosRequest } from './axios';
 import { TPageResponse, TResponseType } from './type/commonResponse';
 import {
   TTrackRequestParams,
+  TTrackReservationDetailResponse,
   TTrackReservationRequest,
   TTrackReservationRequestParams,
   TTrackReservationSlotRequestParams,
@@ -54,6 +55,14 @@ const TrackApi = {
     return data;
   },
 
+  // 시험장 예약 상세
+  getTrackReservationDetail: async (
+    id?: number,
+  ): Promise<TResponseType<TTrackReservationDetailResponse>> => {
+    const { data } = await axiosRequest.get(`/tracks/reservations/${id}`);
+    return data;
+  },
+
   // 시험장 예약 현황 슬롯
   getTrackReservationSlots: async (
     params: TTrackReservationSlotRequestParams,
@@ -73,6 +82,16 @@ const TrackApi = {
       date: request.date,
       reservationSlots: request.reservationSlots,
     });
+    return data;
+  },
+
+  // 시험장 예약 취소
+  deleteTrackReservation: async (
+    id?: number,
+  ): Promise<TResponseType<TTrackReservationDetailResponse>> => {
+    const { data } = await axiosRequest.delete(
+      `/tracks/reservations/${id}/cancel`,
+    );
     return data;
   },
 };
