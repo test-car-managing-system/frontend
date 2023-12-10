@@ -122,6 +122,11 @@ function TrackReservationDetail() {
           property="delete"
           label="취소"
           onClick={() => onDeleteButtonClick()}
+          state={
+            trackReservationDetail &&
+            (trackReservationDetail.status == 'RESERVED' ||
+              trackReservationDetail.status == 'USING')
+          }
         />
       </ButtonContainer>
     </Wrapper>

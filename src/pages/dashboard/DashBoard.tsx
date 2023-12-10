@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import CarReservationTable from '../../components/table/CarReservationTable';
 import TrackReservaitonTable from '../../components/table/TrackReservaitonTable';
+import TrackMyReservaitonTable from '../../components/table/TrackMyReservaitonTable';
 
 function DashBoard() {
   return (
@@ -8,7 +9,7 @@ function DashBoard() {
       {/* <SizedBox /> */}
       <CarReservationTable title="시험 차량 대여 현황" />
       <SizedBox />
-      <TrackReservaitonTable title="시험장 대여 현황" />
+      <TrackMyReservaitonTable title="시험장 대여 현황" />
     </Wrapper>
   );
 }

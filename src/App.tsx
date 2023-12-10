@@ -7,6 +7,7 @@ import Template from './components/layout/Template';
 import Car from './pages/car';
 import Member from './pages/member';
 import Track from './pages/track';
+import GasStationHistory from './pages/gas/GasStationHistory';
 
 function App() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function App() {
       <Routes key={location.pathname} location={location}>
         <Route path="/cars/*" element={<Car />} />
         <Route path="/members/*" element={<Member />} />
+        <Route path="/gas" element={<GasStationHistory />} />
         <Route path="/tracks/*" element={<Track />} />
         <Route path="/" element={<DashBoard />} />
         <Route path="*" element={<NotFound />} />
