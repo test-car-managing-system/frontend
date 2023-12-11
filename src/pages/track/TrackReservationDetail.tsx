@@ -137,20 +137,6 @@ export default TrackReservationDetail;
 
 const Wrapper = styled.div``;
 
-const SizedBox = styled.div`
-  width: 100%;
-  height: 20px;
-`;
-
-const VerticalSizedBox = styled.div`
-  width: 100%;
-  height: 20px;
-`;
-
-const HorizontalSizedBox = styled.div`
-  width: 5px;
-`;
-
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
