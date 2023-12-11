@@ -1,10 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import GasStationHistory from './GasStationHistory';
 import GasStationHistoryDetail from './GasStationHistoryDetail';
+import GasStation from './GasStations';
 
-const GasStation = () => {
+const GasStations = () => {
   return (
     <Routes>
+      <Route path="/station" element={<GasStation />} />
       <Route path="/history" element={<GasStationHistory />} />
       <Route path="/history/detail/:id" element={<GasStationHistoryDetail />} />
       <Route path="/*" element={<Navigate to="/404" />} />
@@ -12,4 +14,4 @@ const GasStation = () => {
   );
 };
 
-export default GasStation;
+export default GasStations;
