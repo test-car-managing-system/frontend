@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import TestSearchBoard from '../../components/board/TestSearchBoard';
+import CarTestSearchBoard from '../../components/board/CarTestSearchBoard';
 
 // 시험 수행 이력
 function CarTests() {
   return (
     <Wrapper>
-      <TestSearchBoard />
+      <CarTestSearchBoard />
     </Wrapper>
   );
 }

@@ -131,7 +131,7 @@ function CarTestTable({ title, usePagenation, maxResult, params }: TableProps) {
   // 차량 클릭 시 이동 로직
   const navigate = useNavigate();
   const handleRowClick = (record: any) => {
-    navigate(`/car/tests/detail/${record.id}`);
+    navigate(`/cars/tests/detail/${record.id}`);
   };
   const onRow = (record: any) => {
     return {

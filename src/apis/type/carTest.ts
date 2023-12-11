@@ -2,10 +2,18 @@ export interface TCarTestResponse {
   id?: number;
   trackName?: string;
   memberName?: string;
+  updateMemberName?: string;
+  location?: string;
   departmentName?: string;
+  length?: number;
+  description?: string;
   carName?: string;
   stockNumber?: string;
+  result?: string;
   performedAt?: string;
+  memo?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TCarTestRequestParams {

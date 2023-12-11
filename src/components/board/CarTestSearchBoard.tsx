@@ -3,15 +3,13 @@ import { DatePicker, Form, Input, Select } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
 import DepartmentApi from '../../apis/DeparmentApi';
-import { TGasStationHistoryRequestParams } from '../../apis/type/gasStationHistory';
-import GasStationHistoryTable from '../table/GasStationHistoryTable';
 import { TCarTestRequestParams } from '../../apis/type/carTest';
 import CarTestTable from '../table/CarTestTable';
 
 const { RangePicker } = DatePicker;
 
 // 시험 수행 이력 검색
-function TestSearchBoard() {
+function CarTestSearchBoard() {
   const [params, setParams] = useState<TCarTestRequestParams>();
   const [form] = Form.useForm();
   const handleSearchButtonClick = () => {
@@ -131,7 +129,7 @@ function TestSearchBoard() {
   );
 }
 
-export default TestSearchBoard;
+export default CarTestSearchBoard;
 
 const Container = styled.div`
   width: 100%;
