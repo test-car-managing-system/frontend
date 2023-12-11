@@ -26,7 +26,6 @@ function CarSelectionDetail() {
   const { id } = useParams();
   const [testCar, setTestCar] = useState<TTestCarResponse>();
   const [params, setParams] = useState<TCarStockRequestParams>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     id &&

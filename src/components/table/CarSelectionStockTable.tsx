@@ -6,18 +6,14 @@ import { TableProps } from './type/TableProps';
 import {
   CarStockStatus,
   CarType,
-  TCarStockRequest,
   TCarStockResponse,
 } from '../../apis/type/car';
-import { useNavigate, useParams } from 'react-router-dom';
 import CarApi from '../../apis/CarApi';
 import Button from '../button/Button';
 import ConfirmModal from '../modal/ConfirmModal';
 import styled from 'styled-components';
 import { AxiosError } from 'axios';
 import { ErrorResponse } from '../../apis/type/commonResponse';
-import useGetMyInfo from '../../hooks/query/useGetMyInfo';
-import CarStockRegisterModal from '../modal/CarStockRegisterModal';
 import ErrorModal from '../modal/ErrorModal';
 import dayjs from 'dayjs';
 

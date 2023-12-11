@@ -8,6 +8,14 @@ export interface TGasStationHistoryRequestParams {
   endDate?: number;
 }
 
+export interface TGasStationHistoryRequest {
+  id?: number;
+  gasStationName?: string;
+  stockNumber?: string;
+  amount?: number;
+  usedAt?: string;
+}
+
 export interface TGasStationHistoryResponse {
   id?: number;
   name?: string;
@@ -17,4 +25,7 @@ export interface TGasStationHistoryResponse {
   departmentName?: string;
   usedAt?: string;
   amount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  updateMemberName?: string;
 }

@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Table as BaseTable, Form, Select } from 'antd';
+import { Table as BaseTable } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { TableRowSelection } from 'antd/es/table/interface';
 import TableTitle from './TableTitle';
 import { TableProps } from './type/TableProps';
-import { CarType } from '../../apis/type/car';
-import useGetCars from '../../hooks/query/useGetCars';
 import styled from 'styled-components';
 import { TPageRequest } from '../../apis/type/commonRequest';
 import PageSizeSelect from '../select/PageSizeSelect';
 import Pagination from '../select/Pagination';
 import { useNavigate } from 'react-router-dom';
-import CarApi from '../../apis/CarApi';
 import GasStationHistoryApi from '../../apis/GasStationHistoryApi';
-import { TPageResponse } from '../../apis/type/commonResponse';
-import { TGasStationHistoryResponse } from '../../apis/type/gasStationHistory';
+import { ErrorResponse, TPageResponse } from '../../apis/type/commonResponse';
+import {
+  TGasStationHistoryRequest,
+  TGasStationHistoryResponse,
+} from '../../apis/type/gasStationHistory';
+import Button from '../button/Button';
+import GasStationHistoryRegisterModal from '../modal/GasStationHistoryRegisterModal';
+import ErrorModal from '../modal/ErrorModal';
+import { AxiosError } from 'axios';
 
 interface DataType {
   key: React.Key;
@@ -71,6 +74,9 @@ function GasStationHistoryTable({
   maxResult,
   params,
 }: TableProps) {
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [registerModalOpen, setRegisterModalOpen] = useState<boolean>(false);
   // 페이지네이션 관리
   const [totalElements, setTotalElements] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -139,8 +145,47 @@ function GasStationHistoryTable({
     };
   };
 
+  // 모달 오픈
+  const onRegisterButtonClick = () => {
+    setRegisterModalOpen(true);
+  };
+
+  const onRegisterButtonConfirmClick = (request: TGasStationHistoryRequest) => {
+    GasStationHistoryApi.postGasStationHistory(request)
+      .then((res) => {
+        GasStationHistoryApi.getGasStationHistories(params, pageParams).then(
+          (res) => res.result && setFetchData(res.result),
+        );
+        setRegisterModalOpen(false);
+      })
+      .catch((error: AxiosError) => {
+        const data: ErrorResponse = error.response?.data as ErrorResponse;
+        if (data.errors) {
+          setErrorMessage(data.errors[0].reason);
+        } else {
+          setErrorMessage(data.message);
+        }
+        setErrorModalOpen(true);
+      });
+  };
+
   return (
     <>
+      <GasStationHistoryRegisterModal
+        title="주유 이력 등록"
+        modalOpen={registerModalOpen}
+        onConfirm={(request: TGasStationHistoryRequest) =>
+          onRegisterButtonConfirmClick(request)
+        }
+        onCancel={() => setRegisterModalOpen(false)}
+        buttonText="등록하기"
+        property="update"
+      />
+      <ErrorModal
+        modalOpen={errorModalOpen}
+        content={errorMessage}
+        onCancel={() => setErrorModalOpen(false)}
+      />
       <SelectContainer>
         <TableTitle text={title} />
         {usePagenation && pageSelect}
@@ -155,6 +200,15 @@ function GasStationHistoryTable({
         }}
       />
       {usePagenation && pagination}
+      <ButtonContainer>
+        <Button
+          property="update"
+          label="등록"
+          onClick={() => {
+            onRegisterButtonClick();
+          }}
+        />
+      </ButtonContainer>
     </>
   );
 }
@@ -180,4 +234,12 @@ const PaginationContainer = styled.div`
   justify-content: center;
   align-items: center;
   background-color: transparent;
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  padding-top: 10px;
+  justify-content: right;
+  align-items: center;
 `;
