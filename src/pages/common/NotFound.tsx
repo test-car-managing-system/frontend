@@ -12,8 +12,8 @@ function NotFound() {
       </Notice>
       <LongButton
         property="update"
-        label="이전 페이지로 가기"
-        onClick={() => navigate(-2)}
+        label="메인 페이지로 가기"
+        onClick={() => navigate('/')}
       ></LongButton>
     </Wrapper>
   );
