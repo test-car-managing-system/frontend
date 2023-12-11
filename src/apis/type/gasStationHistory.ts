@@ -25,4 +25,7 @@ export interface TGasStationHistoryResponse {
   departmentName?: string;
   usedAt?: string;
   amount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  updateMemberName?: string;
 }

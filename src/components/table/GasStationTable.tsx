@@ -279,27 +279,6 @@ function GasStationTable({ title }: TableProps) {
 
 export default GasStationTable;
 
-const SelectContainer = styled.div`
-  width: 100%;
-  height: 30px;
-  margin-bottom: 20px;
-  display: flex;
-  padding: 5px;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-`;
-
-const PaginationContainer = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  display: flex;
-  padding: 5px;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-`;
-
 const HorizontalSizedBox = styled.div`
   width: 5px;
 `;

@@ -4,7 +4,7 @@ import ConfirmButton from '../button/ConfirmButton';
 import { useEffect, useState } from 'react';
 import { TGasStationRequest } from '../../apis/type/gasStation';
 import { TGasStationHistoryRequest } from '../../apis/type/gasStationHistory';
-
+import dayjs from 'dayjs';
 interface ConfirmModalProps {
   title: string;
   modalOpen: boolean;
@@ -79,6 +79,10 @@ function GasStationHistoryRegisterModal({
               name: defaultValues?.name,
               stockNumber: defaultValues?.stockNumber,
               amount: defaultValues?.amount,
+              usedAt:
+                defaultValues &&
+                defaultValues.usedAt &&
+                dayjs(defaultValues.usedAt),
             }}
             size="middle"
             name="registerGasStation"
@@ -118,7 +122,7 @@ function GasStationHistoryRegisterModal({
               name="usedAt"
               label="주유일시"
               wrapperCol={{ offset: 2 }}
-              rules={[{ required: true, message: '주유량을 입력하세요' }]}
+              rules={[{ required: true, message: '주유일시를 입력하세요' }]}
             >
               <DatePicker />
             </Form.Item>

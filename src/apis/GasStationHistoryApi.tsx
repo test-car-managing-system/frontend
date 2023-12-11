@@ -1,7 +1,6 @@
 import { axiosRequest } from './axios';
 import { TPageRequest } from './type/commonRequest';
 import { TPageResponse, TResponseType } from './type/commonResponse';
-import { TGasStationResponse } from './type/gasStation';
 import {
   TGasStationHistoryRequest,
   TGasStationHistoryRequestParams,
@@ -48,6 +47,30 @@ const GasStationHistoryApi = {
       amount: body?.amount,
       usedAt: body?.usedAt,
     });
+    return data;
+  },
+
+  // 주유 이력 수정
+  updateGasStationHistory: async (
+    body: TGasStationHistoryRequest,
+  ): Promise<TResponseType<TGasStationHistoryResponse>> => {
+    const { data } = await axiosRequest.patch(
+      `/gas-stations/history/${body.id}`,
+      {
+        gasStationName: body?.gasStationName,
+        stockNumber: body?.stockNumber,
+        amount: body?.amount,
+        usedAt: body?.usedAt,
+      },
+    );
+    return data;
+  },
+
+  // 주유 이력 삭제
+  deleteGasStationHistory: async (
+    id?: number,
+  ): Promise<TResponseType<TGasStationHistoryResponse>> => {
+    const { data } = await axiosRequest.post(`/gas-stations/history/${id}`);
     return data;
   },
 };
