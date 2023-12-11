@@ -9,6 +9,7 @@ import Member from './pages/member';
 import Track from './pages/track';
 import GasStation from './pages/gas';
 import MyPage from './pages/member/MyPage';
+import Expense from './pages/expense/Expense';
 
 function App() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function App() {
       <Routes key={location.pathname} location={location}>
         <Route path="/cars/*" element={<Car />} />
         <Route path="/members/*" element={<Member />} />
+        <Route path="/expenses" element={<Expense />} />
         <Route path="/gas/*" element={<GasStation />} />
         <Route path="/tracks/*" element={<Track />} />
         <Route path="/me" element={<MyPage />} />
