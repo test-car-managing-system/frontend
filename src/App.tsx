@@ -7,9 +7,8 @@ import Template from './components/layout/Template';
 import Car from './pages/car';
 import Member from './pages/member';
 import Track from './pages/track';
-import GasStationHistory from './pages/gas/GasStationHistory';
-import GasStationHistoryDetail from './pages/gas/GasStationHistoryDetail';
 import GasStation from './pages/gas';
+import MyPage from './pages/member/MyPage';
 
 function App() {
   const location = useLocation();
@@ -32,6 +31,7 @@ function App() {
         <Route path="/members/*" element={<Member />} />
         <Route path="/gas/*" element={<GasStation />} />
         <Route path="/tracks/*" element={<Track />} />
+        <Route path="/me" element={<MyPage />} />
         <Route path="/" element={<DashBoard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
