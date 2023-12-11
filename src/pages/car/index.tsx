@@ -6,11 +6,15 @@ import CarStocks from './CarStocks';
 import CarSelection from './CarSelection';
 import CarSelectionDetail from './CarSelectionDetail';
 import CarReservation from './CarReservation';
+import CarTests from './CarTests';
+import CarTestDetail from './CarTestDetail';
 
 const Cars = () => {
   return (
     <Routes>
       <Route path="/" element={<Car />} />
+      <Route path="/tests" element={<CarTests />} />
+      <Route path="/tests/detail/:id" element={<CarTestDetail />} />
       <Route path="/stocks" element={<CarStocks />} />
       <Route path="/reservations" element={<CarReservation />} />
       <Route path="/reservations/new" element={<CarSelection />} />

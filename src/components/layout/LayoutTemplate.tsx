@@ -54,11 +54,11 @@ function LayoutMenu({ children, variant }: TemplateProps) {
       getItem('차량 관리', '/cars'),
       getItem('차량 등록', '/cars/register'),
       getItem('재고 관리', '/cars/stocks'),
+      getItem('시험 수행 이력', '/cars/tests'),
     ]),
     getItem('시험장 관리', 'tracks', <FlagOutlined />, [
       getItem('예약', '/tracks/reservations/new'),
       getItem('예약 이력', '/tracks/reservations'),
-      getItem('시험 수행 이력', '/tracks/tests'),
       getItem('시험장 관리', '/tracks'),
     ]),
     getItem('주유소 관리', 'gas', <ThunderboltOutlined />, [
