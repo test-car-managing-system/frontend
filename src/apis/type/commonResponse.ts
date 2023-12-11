@@ -17,5 +17,11 @@ export type ErrorResponse = {
   success: boolean;
   message: string;
   code: string;
-  errors: object[];
+  errors: ErrorField[];
+};
+
+export type ErrorField = {
+  field: string;
+  value: string;
+  reason: string;
 };
