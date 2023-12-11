@@ -49,12 +49,12 @@ function LayoutMenu({ children, variant }: TemplateProps) {
     getItem('시험차량 관리', 'cars/reservations', <CarOutlined />, [
       getItem('대여', '/cars/reservations/new'),
       getItem('대여 이력', '/cars/reservations'),
+      getItem('시험 수행 이력', '/cars/tests'),
     ]),
     getItem('차량 관리', 'cars', <ToolOutlined />, [
       getItem('차량 관리', '/cars'),
       getItem('차량 등록', '/cars/register'),
       getItem('재고 관리', '/cars/stocks'),
-      getItem('시험 수행 이력', '/cars/tests'),
     ]),
     getItem('시험장 관리', 'tracks', <FlagOutlined />, [
       getItem('예약', '/tracks/reservations/new'),
