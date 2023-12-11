@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import TrackReservaitonTable from '../../components/table/TrackMyReservaitonTable';
 import TrackReservationSearchBoard from '../../components/board/TrackReservationSearchBoard';
 
 function TrackReservation() {

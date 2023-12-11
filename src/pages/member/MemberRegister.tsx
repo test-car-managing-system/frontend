@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import MemberRegisterBoard from '../../components/board/MemberRegisterBoard';
 
-function CarRegister() {
+function MemberRegister() {
   return (
     <Wrapper>
       <MemberRegisterBoard />
@@ -9,7 +9,7 @@ function CarRegister() {
   );
 }
 
-export default CarRegister;
+export default MemberRegister;
 
 const Wrapper = styled.div``;
 

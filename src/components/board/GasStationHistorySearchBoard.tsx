@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { DatePicker, Form, Input, Select } from 'antd';
 import styled from 'styled-components';
 import Button from '../button/Button';
-import CarSelectionTable from '../table/CarSelectionTable';
 import DepartmentApi from '../../apis/DeparmentApi';
 import { TGasStationHistoryRequestParams } from '../../apis/type/gasStationHistory';
 import GasStationHistoryTable from '../table/GasStationHistoryTable';

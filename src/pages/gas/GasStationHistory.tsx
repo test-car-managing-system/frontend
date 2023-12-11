@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import GasStationHistorySearchBoard from '../../components/board/GasStationHistorySearchBoard';
 
-// 시험장 관리
 function GasStationHistory() {
   return (
     <Wrapper>

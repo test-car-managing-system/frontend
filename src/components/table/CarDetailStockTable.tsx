@@ -71,7 +71,6 @@ function CarStockTable({ title, params }: TableProps) {
   const { id } = useParams();
   const { status, data: user } = useGetMyInfo();
   const hasRole = user?.result.role == 'ADMIN';
-  console.log(hasRole);
 
   useEffect(() => {
     id &&
