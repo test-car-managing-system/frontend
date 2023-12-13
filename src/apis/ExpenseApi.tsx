@@ -61,8 +61,8 @@ const ExpenseApi = {
     return data;
   },
 
-  // 주유 이력 삭제
-  deleteGasStationHistory: async (
+  // 지출 이력 삭제
+  deleteExpense: async (
     id?: number,
   ): Promise<TResponseType<TExpenseResponse>> => {
     const { data } = await axiosRequest.post(`/expenses/${id}`);

@@ -31,17 +31,17 @@ function CarTestDetail() {
   const [data, setData] = useState<{ title: string; data?: string }[]>();
   useEffect(() => {
     setData([
-      { title: '시험장명', data: carTest?.trackName },
       { title: '사용자명', data: carTest?.memberName },
-      { title: '위치', data: carTest?.location },
       { title: '부서', data: carTest?.departmentName },
-      { title: '길이', data: carTest?.length?.toString() },
+      { title: '시험장명', data: carTest?.trackName },
+      { title: '위치', data: carTest?.location },
+      { title: '길이', data: `${carTest?.length} m` },
       { title: '특성', data: carTest?.description },
       { title: '차량명', data: carTest?.carName },
       { title: '재고번호', data: carTest?.stockNumber },
       { title: '주행결과', data: carTest?.result },
       { title: '수행일자', data: carTest?.performedAt },
-      { title: '비고', data: carTest?.memo || '없음' },
+      { title: '비고', data: carTest?.memo || '-' },
       { title: '등록일자', data: carTest?.createdAt },
       { title: '수정인', data: carTest?.updateMemberName },
       { title: '수정일자', data: carTest?.updatedAt },

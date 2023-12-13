@@ -12,7 +12,7 @@ interface ConfirmModalProps {
   buttonText: string;
   defaultValues?: {
     id?: number;
-    name?: string;
+    description?: string;
     stockNumber?: string;
     amount?: number;
     usedAt?: string;
@@ -75,7 +75,7 @@ function ExpenseRegisterModal({
         <Container>
           <Form
             initialValues={{
-              name: defaultValues?.name,
+              description: defaultValues?.description,
               stockNumber: defaultValues?.stockNumber,
               amount: defaultValues?.amount,
               usedAt:

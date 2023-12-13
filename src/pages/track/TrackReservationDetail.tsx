@@ -32,7 +32,7 @@ function TrackReservationDetail() {
   }, []);
 
   const [data, setData] = useState<{ title: string; data?: string }[]>();
-  const [reservationTimeDiv, serReservationTimeDiv] = useState<
+  const [reservationTimeDiv, setReservationTimeDiv] = useState<
     React.ReactNode[]
   >([]);
   useEffect(() => {
@@ -46,17 +46,23 @@ function TrackReservationDetail() {
           trackReservationDetail?.status as unknown as keyof typeof TrackReservationStatus
         ],
       },
-      { title: '길이', data: trackReservationDetail?.length?.toString() },
+      { title: '길이', data: `${trackReservationDetail?.length} m` },
       { title: '특성', data: trackReservationDetail?.description },
     ]);
 
-    const timeSlots: React.ReactNode[] = [];
+    const timeSlots: string[] = [];
     trackReservationDetail?.reservationTime.forEach((slot) => {
       timeSlots.push(
-        <Row>{`${slot.startedAt} ~ ${slot.expiredAt?.split(' ')[1]}`}</Row>,
+        `${slot.startedAt?.substring(0, 16)} ~ ${slot.expiredAt
+          ?.split(' ')[1]
+          .substring(0, 5)}`,
       );
     });
-    serReservationTimeDiv(timeSlots);
+    const timeSlotsNodes: React.ReactNode[] = [];
+    timeSlots.sort().forEach((slot) => {
+      timeSlotsNodes.push(<Row>{slot}</Row>);
+    });
+    setReservationTimeDiv(timeSlotsNodes);
   }, [trackReservationDetail]);
 
   const onDeleteButtonClick = () => {

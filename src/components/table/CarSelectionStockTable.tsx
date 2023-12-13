@@ -69,9 +69,10 @@ function CarSelectionStockTable({ title, params }: TableProps) {
 
   // 쿼리
   useEffect(() => {
-    CarApi.getCarStocks(params).then(
-      (res) => res.result.contents && setCarStocks(res.result.contents),
-    );
+    params &&
+      CarApi.getCarStocks(params).then(
+        (res) => res.result.contents && setCarStocks(res.result.contents),
+      );
   }, [params]);
 
   const [data, setData] = useState<DataType[]>([]);
