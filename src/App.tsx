@@ -10,6 +10,7 @@ import Track from './pages/track';
 import GasStation from './pages/gas';
 import MyPage from './pages/member/MyPage';
 import Expense from './pages/expense/Expense';
+import ExpenseDetail from './pages/expense/ExpenseDetail';
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/cars/*" element={<Car />} />
         <Route path="/members/*" element={<Member />} />
         <Route path="/expenses" element={<Expense />} />
+        <Route path="/expenses/detail/:id" element={<ExpenseDetail />} />
         <Route path="/gas/*" element={<GasStation />} />
         <Route path="/tracks/*" element={<Track />} />
         <Route path="/me" element={<MyPage />} />
