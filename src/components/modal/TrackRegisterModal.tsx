@@ -116,7 +116,7 @@ function TrackReigsterModal({
             </Form.Item>
             <Form.Item
               name="length"
-              label="길이"
+              label="길이(m) "
               wrapperCol={{ offset: 2 }}
               rules={[{ required: true, message: '시험장 길이를 입력하세요' }]}
             >

@@ -26,7 +26,7 @@ function TrackSelectionDetail() {
       { title: '기상상태', data: '맑음' }, //todo
       { title: '위치', data: track?.location },
       { title: '기온', data: `${25}℃` },
-      { title: '길이', data: track?.length?.toString() },
+      { title: '길이', data: `${track?.length} m` },
       { title: '특성', data: track?.description },
     ]);
   }, [track]);
