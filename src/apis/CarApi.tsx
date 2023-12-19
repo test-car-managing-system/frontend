@@ -2,6 +2,7 @@ import { axiosRequest } from './axios';
 import {
   TCarRequest,
   TCarRequestParams,
+  TCarReservationRankingResponse,
   TCarReservationsRequestParams,
   TCarReservationsResponse,
   TCarResponse,
@@ -192,6 +193,16 @@ const CarApi = {
         size: page?.size,
       },
     });
+    return data;
+  },
+
+  // 시험차량 예약 랭킹 조회
+  getCarReservationsRanking: async (): Promise<
+    TResponseType<TCarReservationRankingResponse[]>
+  > => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/cars/reservations/rank');
     return data;
   },
 

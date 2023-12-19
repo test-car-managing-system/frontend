@@ -50,6 +50,11 @@ export interface TTrackReservationsResponse {
   status: TrackReservationStatus;
 }
 
+export interface TTrackReservationRankingResponse {
+  name: string;
+  count: number;
+}
+
 export interface TTrackReservationDetailResponse {
   id: number;
   memberName: string;

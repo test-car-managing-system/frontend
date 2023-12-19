@@ -84,6 +84,11 @@ export interface TCarReservationsResponse {
   status: CarReservationStatus;
 }
 
+export interface TCarReservationRankingResponse {
+  name: string;
+  count: number;
+}
+
 export enum CarReservationStatus {
   RESERVED = '예약중',
   RETURNED = '반납완료',

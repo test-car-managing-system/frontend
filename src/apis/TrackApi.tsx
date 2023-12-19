@@ -4,6 +4,7 @@ import {
   TTrackRequest,
   TTrackRequestParams,
   TTrackReservationDetailResponse,
+  TTrackReservationRankingResponse,
   TTrackReservationRequest,
   TTrackReservationRequestParams,
   TTrackReservationSlotRequestParams,
@@ -53,6 +54,16 @@ const TrackApi = {
         status: params?.status,
       },
     });
+    return data;
+  },
+
+  // 시험장 예약 랭킹 조회
+  getTrackReservationsRanking: async (): Promise<
+    TResponseType<TTrackReservationRankingResponse[]>
+  > => {
+    const token = localStorage.getItem('accessToken');
+    axiosRequest.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    const { data } = await axiosRequest.get('/tracks/reservations/rank');
     return data;
   },
 
