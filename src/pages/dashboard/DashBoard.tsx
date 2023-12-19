@@ -1,15 +1,82 @@
 import styled from 'styled-components';
 import CarReservationTable from '../../components/table/CarReservationTable';
-import TrackReservaitonTable from '../../components/table/TrackReservaitonTable';
 import TrackMyReservaitonTable from '../../components/table/TrackMyReservaitonTable';
+import { Row, Col } from 'antd';
+import { useEffect, useState } from 'react';
+import CarApi from '../../apis/CarApi';
+import { TCarReservationRankingResponse } from '../../apis/type/car';
+import TrackApi from '../../apis/TrackApi';
+import { TTrackReservationRankingResponse } from '../../apis/type/track';
+import ReservationRankingChart from '../../components/chart/ReservationRankingChart';
+import TableTitle from '../../components/table/TableTitle';
+
+interface Data {
+  id: string;
+  value: number;
+}
 
 function DashBoard() {
+  const [carReservationsRank, setCarReservationsRank] = useState<
+    TCarReservationRankingResponse[]
+  >([]);
+
+  const [carReservationsRankData, setCarReservationsRankData] = useState<
+    Data[]
+  >([]);
+
+  const [trackReservationsRank, setTrackReservationsRank] = useState<
+    TTrackReservationRankingResponse[]
+  >([]);
+
+  const [trackReservationsRankData, setTrackReservationsRankData] = useState<
+    Data[]
+  >([]);
+
+  useEffect(() => {
+    CarApi.getCarReservationsRanking().then((res) => {
+      res && setCarReservationsRank(res.result);
+    });
+
+    TrackApi.getTrackReservationsRanking().then((res) => {
+      res && setTrackReservationsRank(res.result);
+    });
+  }, []);
+
+  useEffect(() => {
+    const carData: Data[] = [];
+    const trackData: Data[] = [];
+    carReservationsRank.forEach((rank) => {
+      carData.push({
+        id: rank.name,
+        value: rank.count,
+      });
+    });
+
+    trackReservationsRank.forEach((rank) => {
+      trackData.push({
+        id: rank.name,
+        value: rank.count,
+      });
+    });
+    setCarReservationsRankData(carData);
+    setTrackReservationsRankData(trackData);
+  }, [carReservationsRank, trackReservationsRank]);
+
   return (
     <Wrapper>
-      {/* <SizedBox /> */}
-      <CarReservationTable title="시험 차량 대여 현황" />
+      <Container>
+        <ReservationRankingChart
+          data={carReservationsRankData}
+          title={'최근 1주일 대여 차량 순위'}
+        />
+        <ReservationRankingChart
+          data={trackReservationsRankData}
+          title={'최근 1주일 대여 시험장 순위'}
+        />
+      </Container>
+      <CarReservationTable title="나의 시험 차량 대여 현황" />
       <SizedBox />
-      <TrackMyReservaitonTable title="시험장 대여 현황" />
+      <TrackMyReservaitonTable title="나의 시험장 대여 현황" maxResult={5} />
     </Wrapper>
   );
 }
@@ -26,4 +93,11 @@ const Wrapper = styled.div`
 const SizedBox = styled.div`
   width: 100%;
   height: 50px;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;

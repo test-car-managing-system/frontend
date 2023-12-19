@@ -42,7 +42,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-function TrackMyReservaitonTable({ title, params }: TableProps) {
+function TrackMyReservaitonTable({ title, params, maxResult }: TableProps) {
   const [fetchData, setFetchData] = useState<TTrackReservationsResponse[]>([]);
   const [trackReservations, setTrackReservations] = useState<DataType[]>([]);
 
@@ -55,8 +55,11 @@ function TrackMyReservaitonTable({ title, params }: TableProps) {
 
   useEffect(() => {
     const rawData: DataType[] = [];
+    const size: number = maxResult
+      ? Math.min(maxResult, fetchData.length)
+      : fetchData.length;
     if (fetchData) {
-      for (let i = 0; i < fetchData.length; i++) {
+      for (let i = 0; i < size; i++) {
         rawData.push({
           key: i + 1,
           id: fetchData[i]?.id,
