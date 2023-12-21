@@ -4,6 +4,8 @@ export interface TTrackResponse {
   location?: string;
   longitude?: string;
   latitude?: string;
+  weather?: string;
+  temperature?: string;
   description?: string;
   length?: number;
 }
