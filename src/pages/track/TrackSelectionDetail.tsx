@@ -23,9 +23,15 @@ function TrackSelectionDetail() {
   useEffect(() => {
     setData([
       { title: '시험장명', data: track?.name },
-      { title: '기상상태', data: '맑음' }, //todo
+      {
+        title: '기상상태',
+        data: track?.weather ? track.weather : '일 수 없음',
+      },
       { title: '위치', data: track?.location },
-      { title: '기온', data: `${25}℃` },
+      {
+        title: '기온',
+        data: track?.temperature ? `${track.temperature}℃` : '알 수 없음',
+      },
       { title: '길이', data: `${track?.length} m` },
       { title: '특성', data: track?.description },
     ]);
